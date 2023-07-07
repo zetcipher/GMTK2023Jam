@@ -92,7 +92,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_dlkh2")
 }],
 "loop": true,
-"name": &"new_animation",
+"name": &"minotaur",
 "speed": 5.0
 }]
 
@@ -251,7 +251,7 @@ vframes = 6
 [node name="MonSprite" type="AnimatedSprite2D" parent="."]
 visible = false
 sprite_frames = SubResource("SpriteFrames_qo8qm")
-animation = &"bird"
+animation = &"minotaur"
 
 [node name="CharAnimator" type="AnimationPlayer" parent="."]
 libraries = {
