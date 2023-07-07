@@ -17,3 +17,12 @@ enum Skills {MELEE, GUN, MAGIC, DEFEND, HEAL_ONE, HEAL_ALL, BUFF_ATK, BUFF_EVA}
 var HP := 100
 
 @export var set_skills : Array[Skills] = [Skills.MELEE, Skills.BUFF_ATK, Skills.DEFEND]
+
+
+func change_hp(amount: int):
+	HP += amount
+	if HP > MHP: HP = MHP
+	if HP < 0: HP = 0
+
+func set_anim(anim_name: String):
+	$CharAnimator.play(anim_name)
