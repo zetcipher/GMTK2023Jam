@@ -11,6 +11,15 @@ func _process(delta):
 			heroHP[i] = randi_range(0, 500)
 		update_heroes()
 
+func set_names(names: Array[String]):
+	hero_names = names
+
+func set_mhp(mhp: Array[int]):
+	heroMHP = mhp
+
+func set_hp(hp: Array[int]):
+	heroHP = hp
+
 func update_heroes():
 	var idx := 0
 	for child in $Heroes.get_children():
