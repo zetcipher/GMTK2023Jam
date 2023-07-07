@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://vpvlwul3rmxi"]
+
+[ext_resource type="PackedScene" uid="uid://be5vj4g8fyflp" path="res://objects/actor.tscn" id="1_uprfe"]
+
+[node name="BattleScene" type="Node2D"]
+
+[node name="MainParty" type="Node2D" parent="."]
+
+[node name="Actor" parent="MainParty" instance=ExtResource("1_uprfe")]
+position = Vector2(464, 72)
+
+[node name="Actor2" parent="MainParty" instance=ExtResource("1_uprfe")]
+position = Vector2(488, 104)
+
+[node name="Actor3" parent="MainParty" instance=ExtResource("1_uprfe")]
+position = Vector2(512, 136)
+
+[node name="Actor4" parent="MainParty" instance=ExtResource("1_uprfe")]
+position = Vector2(536, 168)
+
+[node name="EnemyParty" type="Node2D" parent="."]
