@@ -251,7 +251,7 @@ vframes = 6
 [node name="MonSprite" type="AnimatedSprite2D" parent="."]
 visible = false
 sprite_frames = SubResource("SpriteFrames_qo8qm")
-animation = &"minotaur"
+animation = &"bird"
 
 [node name="CharAnimator" type="AnimationPlayer" parent="."]
 libraries = {

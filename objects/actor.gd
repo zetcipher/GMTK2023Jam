@@ -6,6 +6,7 @@ enum Skills {MELEE, GUN, MAGIC, DEFEND, HEAL_ONE, HEAL_ALL, BUFF_ATK, BUFF_EVA}
 @export var name_color := Color("AFA")
 @export var monster := false
 @export var sprite_set := 0
+@export var face_right := false
 
 @export var MHP := 100
 @export var ATK := 10
@@ -15,9 +16,28 @@ enum Skills {MELEE, GUN, MAGIC, DEFEND, HEAL_ONE, HEAL_ALL, BUFF_ATK, BUFF_EVA}
 @export var SPD := 10
 @export var EVA := 0.0
 
-var HP := 100
+var HP := 999999
 
 @export var set_skills : Array[Skills] = [Skills.MELEE, Skills.BUFF_ATK, Skills.DEFEND]
+
+func _ready():
+	set_sprites()
+	if face_right:
+		$CharSprite.flip_h = true
+		$MonSprite.flip_h = true
+	else:
+		$CharSprite.flip_h = false
+		$MonSprite.flip_h = false
+	
+	if not monster:
+		set_anim("idle")
+		$MonSprite.hide()
+		$CharSprite.show()
+	else:
+		$MonSprite.show()
+		$CharSprite.hide()
+		$MonSprite.play()
+	change_hp(0)
 
 func set_sprites():
 	if not monster:
