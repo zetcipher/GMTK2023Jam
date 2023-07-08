@@ -10,6 +10,7 @@ var acting := false
 @export var enemy_party : Array[Actor]
 
 var actors : Array[Actor]
+var defenders : Array[Actor]
 
 @onready var hud := $HUD as HUD
 @onready var feed := $BattleFeed as BattleFeed
@@ -30,14 +31,27 @@ func _ready():
 func _process(delta):
 	if wait_time <= 0.0:
 		if turn == 0:
+			for actor in main_party:
+				if actor.HP <= 0: 
+					feed.add_line(str("[color=", actor.name_color.to_html(), "]", actor.char_name, "[/color]", " has fallen..."))
+					actor.set_anim("dead")
+					main_party.erase(actor)
+					actors.erase(actor)
+			for actor in enemy_party:
+				if actor.HP <= 0: 
+					feed.add_line(str("[color=", actor.name_color.to_html(), "]", actor.char_name, "[/color]", " has been felled!"))
+					main_party.erase(actor)
+					actors.erase(actor)
 			determine_actions()
+			
+			
 			for actor in actors: actor.target = determine_target(actor)
 		
 		execute_action(actors[turn], actors[turn].target)
 		turn += 1
 		if turn > actors.size() - 1: turn = 0
 		wait_time = 0.25
-	wait_time -= delta
+	if Input.is_action_just_pressed("ui_accept"): wait_time = 0.0
 	pass
 
 
@@ -58,7 +72,7 @@ func get_party_HP_percentage(heroes: bool) -> float:
 
 func determine_actions():
 	for actor in actors:
-		if actor.char_name == "Delta" and get_party_HP_percentage(true) < 0.75:
+		if (actor.char_name == "Delta" and get_party_HP_percentage(true) < 0.75) or (actor.char_name == "Knight" and get_party_HP_percentage(false) < 0.75):
 			actor.next_action = 2
 			while actor.next_action == actor.last_action:
 				actor.next_action = randi_range(1, 2)
@@ -82,11 +96,13 @@ func determine_target(actor: Actor) -> Actor:
 func execute_action(actor: Actor, target: Actor):
 	var action := actor.set_skills[actor.next_action] as Skills
 	var damage := 0
+	var def_mult := 1
+	if target.set_skills[target.next_action] == Skills.DEFEND: def_mult = 3
 	match action:
 		Skills.GUN:
-			damage = calc_damage(actor.ATK, target.DEF, 0)
+			damage = calc_damage(actor.ATK, target.DEF * def_mult, 0)
 		Skills.MAGIC:
-			damage = calc_damage(actor.MAT, target.MDF, 2)
+			damage = calc_damage(actor.MAT, target.MDF * def_mult, 2)
 		Skills.DEFEND: 
 			pass # doesn't need a function
 		Skills.HEAL_ONE:
@@ -98,7 +114,7 @@ func execute_action(actor: Actor, target: Actor):
 		Skills.BUFF_EVA:
 			pass # BUFF FUNCTION
 		_:
-			damage = calc_damage(actor.ATK, target.DEF, 0)
+			damage = calc_damage(actor.ATK, target.DEF * def_mult, 0)
 	send_line_to_feed(actor, target, action, damage)
 	actor.last_action = actor.next_action
 	if action != Skills.HEAL_ALL:
@@ -112,9 +128,13 @@ func execute_action(actor: Actor, target: Actor):
 
 func calc_damage(atk: int, def: int, type := 0) -> int:
 	var dmg: int = 0
-	if type == 2: dmg = atk - def # magic
+	if type == 2: 
+		dmg = atk - def # magic
+		if dmg < 1: dmg = 1
 	if type == 3: dmg = -atk
-	else: dmg = atk * 2 - def
+	else: 
+		dmg = atk * 2 - def
+		if dmg < 1: dmg = 1
 	
 	dmg *= randf_range(0.9, 1.1)
 	
