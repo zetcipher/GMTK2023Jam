@@ -56,19 +56,34 @@ func set_icon(skill: int):
 func set_sprites():
 	if not monster:
 		match sprite_set:
-			1: $CharSprite.texture = preload("res://svb_future1.png")
-			2: $CharSprite.texture = preload("res://svb_future2.png")
-			3: $CharSprite.texture = preload("res://svb_future3.png")
-			4: $CharSprite.texture = preload("res://svb_future4.png")
+			1: 
+				$CharSprite.texture = preload("res://svb_future1.png")
+				$hpbar/name.frame = 0
+			2: 
+				$CharSprite.texture = preload("res://svb_future2.png")
+				$hpbar/name.frame = 1
+			3: 
+				$CharSprite.texture = preload("res://svb_future3.png")
+				$hpbar/name.frame = 2
+			4: 
+				$CharSprite.texture = preload("res://svb_future4.png")
+				$hpbar/name.frame = 3
 			_: 
 				$CharSprite.texture = preload("res://4_5.png")
+				$hpbar/name.frame = 7
 				$hpbar.hide()
 	
 	if monster:
 		match sprite_set:
-			1: $MonSprite.animation = "knight"
-			2: $MonSprite.animation = "minotaur"
-			_: $MonSprite.animation = "bird"
+			1: 
+				$MonSprite.animation = "knight"
+				$hpbar/name.frame = 5
+			2: 
+				$MonSprite.animation = "minotaur"
+				$hpbar/name.frame = 6
+			_: 
+				$MonSprite.animation = "bird"
+				$hpbar/name.frame = 4
 
 func change_hp(amount: int):
 	HP += amount

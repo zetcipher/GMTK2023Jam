@@ -8,7 +8,7 @@ var velocity := Vector2.ZERO
 func _ready():
 	if type == 0:
 		modulate = Color(1.0, 1.0, 1.0)
-		velocity.y = -128
+		velocity.y = -256
 	else:
 		modulate = Color(0.0, 1.0, 0.3)
 

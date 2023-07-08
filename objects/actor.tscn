@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://be5vj4g8fyflp"]
+[gd_scene load_steps=31 format=3 uid="uid://be5vj4g8fyflp"]
 
 [ext_resource type="Texture2D" uid="uid://b4voxpbt11ob4" path="res://svb_future1.png" id="1_5wax4"]
 [ext_resource type="Script" path="res://objects/actor.gd" id="1_t3hci"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://dhac2ejw3x7sc" path="res://smallHealth_under.png" id="8_n24st"]
 [ext_resource type="Texture2D" uid="uid://dsqr3ux18q7a" path="res://smallHealth.png" id="9_mmexg"]
 [ext_resource type="FontFile" uid="uid://2ku355c40ihc" path="res://3x5-numbers.ttf" id="10_pgplq"]
+[ext_resource type="Texture2D" uid="uid://d2ciyj6odyh71" path="res://names.png" id="11_it0fo"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3l6na"]
 atlas = ExtResource("3_re1nc")
@@ -314,3 +315,8 @@ theme_override_font_sizes/font_size = 5
 text = "999/999"
 horizontal_alignment = 2
 clip_text = true
+
+[node name="name" type="Sprite2D" parent="hpbar"]
+position = Vector2(16, -4)
+texture = ExtResource("11_it0fo")
+vframes = 8

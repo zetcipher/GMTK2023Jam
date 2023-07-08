@@ -29,7 +29,7 @@ func _ready():
 
 
 func _process(delta):
-	if wait_time <= 0.0:
+	if wait_time <= 0.0 and acting:
 		if turn == 0:
 			for actor in main_party:
 				if actor.HP <= 0: 
@@ -52,7 +52,9 @@ func _process(delta):
 		if turn > actors.size() - 1: turn = 0
 		wait_time = 0.25
 	if Input.is_action_just_pressed("ui_accept"): wait_time = 0.0
-	pass
+	
+	if acting: feed.show()
+	else: feed.hide()
 
 
 func get_party_HP_percentage(heroes: bool) -> float:
