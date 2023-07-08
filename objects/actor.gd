@@ -77,6 +77,12 @@ func change_hp(amount: int):
 	$hpbar.max_value = MHP
 	$hpbar.value = HP
 	$hpbar/HP.text = str(HP, "/", MHP)
+	if get_hp_percentage() < 0.25: $hpbar/HP.modulate = Color(1.0, 0.0, 0.0)
+	elif get_hp_percentage() < 0.5: $hpbar/HP.modulate = Color(1.0, 1.0, 0.0)
+	else: $hpbar/HP.modulate = Color(1.0, 1.0, 1.0)
+
+func get_hp_percentage() -> float:
+	return float(HP) / float(MHP)
 
 func set_anim(anim_name: String):
 	$CharAnimator.play(anim_name)
