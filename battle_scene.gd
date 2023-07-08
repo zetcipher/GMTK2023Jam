@@ -22,24 +22,62 @@ func _ready():
 	#feed.hide()
 	update_hud()
 	sort_actors()
+	determine_actions()
 	
-	acting = true
+	acting = false
 
 
 func _process(delta):
 	if wait_time <= 0.0:
 		if turn == 0:
 			determine_actions()
-		execute_action(actors[turn], actors.pick_random())
+			for actor in actors: actor.target = determine_target(actor)
+		
+		execute_action(actors[turn], actors[turn].target)
 		turn += 1
 		if turn > actors.size() - 1: turn = 0
-		wait_time = 1.0
+		wait_time = 0.25
 	wait_time -= delta
+	pass
+
+
+func get_party_HP_percentage(heroes: bool) -> float:
+	var total_MHP := 1
+	var total_HP := 1
+	if heroes:
+		for actor in main_party: 
+			total_HP += actor.HP
+			total_MHP += actor.MHP
+	else:
+		for actor in enemy_party: 
+			total_HP += actor.HP
+			total_MHP += actor.MHP
+	
+	return float(total_HP) / float(total_MHP)
 
 
 func determine_actions():
 	for actor in actors:
-		actor.next_action = randi_range(0, 2)
+		if actor.char_name == "Delta" and get_party_HP_percentage(true) < 0.75:
+			actor.next_action = 2
+			while actor.next_action == actor.last_action:
+				actor.next_action = randi_range(1, 2)
+		else:
+			while actor.next_action == actor.last_action:
+				actor.next_action = randi_range(0, actor.set_skills.size() - 1)
+		actor.set_icon(actor.set_skills[actor.next_action])
+		actor.icon_vis(true)
+
+func determine_target(actor: Actor) -> Actor:
+	var skill := actor.set_skills[actor.next_action] as Skills
+	var is_hero := true
+	if enemy_party.has(actor): is_hero = false
+	var target : Actor
+	if (is_hero and skill < 4) or (not is_hero and skill > 3): target = enemy_party.pick_random() 
+	elif (not is_hero and skill < 4) or (is_hero and skill > 3): target = main_party.pick_random() 
+	else: target = actors.pick_random() #failsafe
+	
+	return target
 
 func execute_action(actor: Actor, target: Actor):
 	var action := actor.set_skills[actor.next_action] as Skills
@@ -48,13 +86,13 @@ func execute_action(actor: Actor, target: Actor):
 		Skills.GUN:
 			damage = calc_damage(actor.ATK, target.DEF, 0)
 		Skills.MAGIC:
-			damage = calc_damage(actor.MAT, target.DEF, 2)
+			damage = calc_damage(actor.MAT, target.MDF, 2)
 		Skills.DEFEND: 
 			pass # doesn't need a function
 		Skills.HEAL_ONE:
-			damage = calc_damage(-actor.MAT * 1.5, target.DEF, 2)
+			damage = calc_damage(actor.MAT * 1.5, target.DEF, 3)
 		Skills.HEAL_ALL:
-			damage = calc_damage(-actor.MAT, target.DEF, 2)
+			damage = calc_damage(actor.MAT, target.DEF, 3)
 		Skills.BUFF_ATK:
 			pass # BUFF FUNCTION
 		Skills.BUFF_EVA:
@@ -62,12 +100,23 @@ func execute_action(actor: Actor, target: Actor):
 		_:
 			damage = calc_damage(actor.ATK, target.DEF, 0)
 	send_line_to_feed(actor, target, action, damage)
+	actor.last_action = actor.next_action
+	if action != Skills.HEAL_ALL:
+		target.change_hp(-damage)
+	else:
+		if main_party.has(actor):
+			for p in main_party: p.change_hp(-damage)
+		else:
+			for p in enemy_party: p.change_hp(-damage)
 
 
 func calc_damage(atk: int, def: int, type := 0) -> int:
 	var dmg: int = 0
-	if type == 2: dmg = atk # magic
+	if type == 2: dmg = atk - def # magic
+	if type == 3: dmg = -atk
 	else: dmg = atk * 2 - def
+	
+	dmg *= randf_range(0.9, 1.1)
 	
 	return dmg
 
@@ -84,9 +133,9 @@ func send_line_to_feed(actor: Actor, target: Actor, action: Skills, damage := 0)
 		Skills.DEFEND: 
 			feed.add_line(str(act_str, " is defending..."))
 		Skills.HEAL_ONE:
-			feed.add_line(str(act_str, " healed ", tgt_str, " for [b]", damage, " HP!"))
+			feed.add_line(str(act_str, " healed ", tgt_str, " for [b]", -damage, "[/b] HP!"))
 		Skills.HEAL_ALL:
-			feed.add_line(str(act_str, " healed their party for [b]", damage, " HP!"))
+			feed.add_line(str(act_str, " healed their party for [b]", -damage, "[/b] HP!"))
 		Skills.BUFF_ATK:
 			feed.add_line(str(act_str, " gave a strength buff to ", tgt_str, "!"))
 		Skills.BUFF_EVA:

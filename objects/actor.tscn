@@ -1,10 +1,12 @@
-[gd_scene load_steps=25 format=3 uid="uid://be5vj4g8fyflp"]
+[gd_scene load_steps=27 format=3 uid="uid://be5vj4g8fyflp"]
 
 [ext_resource type="Texture2D" uid="uid://b4voxpbt11ob4" path="res://svb_future1.png" id="1_5wax4"]
 [ext_resource type="Script" path="res://objects/actor.gd" id="1_t3hci"]
 [ext_resource type="Texture2D" uid="uid://ck3wbrojwketh" path="res://monster_bird3.png" id="3_re1nc"]
 [ext_resource type="Texture2D" uid="uid://cioahrocjfwq8" path="res://monster_dknight2.png" id="4_tc56g"]
 [ext_resource type="Texture2D" uid="uid://ckmvk6fgpgwpt" path="res://monster_minotaur.png" id="5_s47eo"]
+[ext_resource type="Texture2D" uid="uid://d1i7b80l7klnu" path="res://skill_icons.png" id="6_gmx1y"]
+[ext_resource type="Texture2D" uid="uid://d2i8tbo3y4404" path="res://skill_bg.png" id="7_ht2vj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3l6na"]
 atlas = ExtResource("3_re1nc")
@@ -257,3 +259,23 @@ animation = &"bird"
 libraries = {
 "": SubResource("AnimationLibrary_o6mix")
 }
+
+[node name="Skill" type="Sprite2D" parent="."]
+visible = false
+z_index = 1
+position = Vector2(0, -31)
+texture = ExtResource("6_gmx1y")
+hframes = 4
+vframes = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="Skill"]
+z_index = -1
+texture = ExtResource("7_ht2vj")
+metadata/_edit_lock_ = true
+
+[node name="hpbar" type="ProgressBar" parent="."]
+offset_left = -24.0
+offset_top = 24.0
+offset_right = 24.0
+offset_bottom = 32.0
+show_percentage = false

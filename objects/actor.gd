@@ -22,6 +22,7 @@ var HP := 999999
 @export var set_skills : Array[Skills] = [Skills.MELEE, Skills.BUFF_ATK, Skills.DEFEND]
 var next_action := 0
 var last_action := -1
+var target : Actor
 
 func _ready():
 	set_sprites()
@@ -42,6 +43,12 @@ func _ready():
 		$MonSprite.play()
 	change_hp(0)
 
+func icon_vis(on: bool):
+	$Skill.visible = on
+
+func set_icon(skill: int):
+	$Skill.frame = skill
+
 func set_sprites():
 	if not monster:
 		match sprite_set:
@@ -61,6 +68,8 @@ func change_hp(amount: int):
 	HP += amount
 	if HP > MHP: HP = MHP
 	if HP < 0: HP = 0
+	$hpbar.max_value = MHP
+	$hpbar.value = HP
 
 func set_anim(anim_name: String):
 	$CharAnimator.play(anim_name)

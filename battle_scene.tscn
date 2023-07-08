@@ -32,27 +32,43 @@ position = Vector2(224, 72)
 char_name = "Alpha"
 sprite_set = 1
 face_right = true
+MHP = 500
+ATK = 20
+DEF = 20
+set_skills = Array[int]([0, 1, 6, 3])
 
 [node name="Actor2" parent="MainParty" instance=ExtResource("1_uprfe")]
 position = Vector2(208, 104)
 char_name = "Bravo"
 sprite_set = 2
 face_right = true
+MHP = 350
+ATK = 35
+MAT = 35
 SPD = 20
+set_skills = Array[int]([0, 1, 2, 3])
 
 [node name="Actor3" parent="MainParty" instance=ExtResource("1_uprfe")]
 position = Vector2(192, 136)
 char_name = "Charlie"
 sprite_set = 3
 face_right = true
+MHP = 250
+ATK = 45
 SPD = 18
+set_skills = Array[int]([0, 1, 7, 3])
 
 [node name="Actor4" parent="MainParty" instance=ExtResource("1_uprfe")]
 position = Vector2(176, 168)
 char_name = "Delta"
 sprite_set = 4
 face_right = true
+MHP = 200
+ATK = 25
+MAT = 40
+MDF = 15
 SPD = 15
+set_skills = Array[int]([2, 4, 5, 3])
 
 [node name="EnemyParty" type="Node2D" parent="."]
 
@@ -61,7 +77,13 @@ position = Vector2(384, 88)
 char_name = "Bird"
 name_color = Color(1, 0.0666667, 0.333333, 1)
 monster = true
+MHP = 200
+ATK = 15
+DEF = 5
+MAT = 20
+MDF = 15
 SPD = 30
+set_skills = Array[int]([0, 2, 7])
 
 [node name="Actor6" parent="EnemyParty" instance=ExtResource("1_uprfe")]
 position = Vector2(408, 120)
@@ -69,7 +91,12 @@ char_name = "Knight"
 name_color = Color(1, 0.0666667, 0.333333, 1)
 monster = true
 sprite_set = 1
+MHP = 400
+ATK = 30
+DEF = 20
+MDF = 5
 SPD = 5
+set_skills = Array[int]([0, 4, 3])
 
 [node name="Actor7" parent="EnemyParty" instance=ExtResource("1_uprfe")]
 position = Vector2(432, 152)
@@ -77,7 +104,13 @@ char_name = "Minotaur"
 name_color = Color(1, 0.0666667, 0.333333, 1)
 monster = true
 sprite_set = 2
+MHP = 300
+ATK = 40
+DEF = 15
+MAT = 15
+MDF = 5
 SPD = 15
+set_skills = Array[int]([0, 2, 6])
 
 [node name="Actor8" parent="EnemyParty" instance=ExtResource("1_uprfe")]
 position = Vector2(472, 120)
