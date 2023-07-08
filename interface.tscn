@@ -1,0 +1,576 @@
+[gd_scene load_steps=4 format=3 uid="uid://cdfegrvsn5cps"]
+
+[ext_resource type="Texture2D" uid="uid://1t1sofhvhs2i" path="res://rect.png" id="1_la0hm"]
+[ext_resource type="FontFile" uid="uid://s8mmcs2jde8j" path="res://n90gamefont.ttf" id="2_fipie"]
+[ext_resource type="Texture2D" uid="uid://dbnrgpnifhgg7" path="res://arrow.png" id="3_fd6kp"]
+
+[node name="Interface" type="Control"]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="Char0" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -256.0
+offset_top = -24.0
+offset_right = -128.0
+offset_bottom = 72.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="NamePlate" type="NinePatchRect" parent="Char0"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 2.0
+offset_right = 103.0
+offset_bottom = 22.0
+texture = ExtResource("1_la0hm")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="Text" type="Label" parent="Char0/NamePlate"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -29.0
+offset_top = -19.0
+offset_right = 29.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_fipie")
+theme_override_font_sizes/font_size = 10
+text = "Minotaur"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MenuBox" type="NinePatchRect" parent="Char0"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 25.0
+offset_right = 127.0
+offset_bottom = 95.0
+texture = ExtResource("1_la0hm")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="Item0" type="Label" parent="Char0/MenuBox"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -67.0
+offset_right = 56.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_fipie")
+theme_override_font_sizes/font_size = 10
+text = "Strike"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Item1" type="Label" parent="Char0/MenuBox"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -51.0
+offset_right = 56.0
+offset_bottom = -34.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_fipie")
+theme_override_font_sizes/font_size = 10
+text = "Magic"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Item2" type="Label" parent="Char0/MenuBox"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -35.0
+offset_right = 56.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_fipie")
+theme_override_font_sizes/font_size = 10
+text = "Buff  ATK"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Item3" type="Label" parent="Char0/MenuBox"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -19.0
+offset_right = 56.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_fipie")
+theme_override_font_sizes/font_size = 10
+text = "Defend"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Char0/MenuBox"]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = 15.0
+offset_bottom = 15.0
+texture = ExtResource("3_fd6kp")
+
+[node name="Char1" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -128.0
+offset_top = -96.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="NamePlate" type="NinePatchRect" parent="Char1"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 2.0
+offset_right = 103.0
+offset_bottom = 22.0
+texture = ExtResource("1_la0hm")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="Text" type="Label" parent="Char1/NamePlate"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -29.0
+offset_top = -19.0
+offset_right = 29.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_fipie")
+theme_override_font_sizes/font_size = 10
+text = "Minotaur"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MenuBox" type="NinePatchRect" parent="Char1"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 25.0
+offset_right = 127.0
+offset_bottom = 95.0
+texture = ExtResource("1_la0hm")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="Item0" type="Label" parent="Char1/MenuBox"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -67.0
+offset_right = 56.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_fipie")
+theme_override_font_sizes/font_size = 10
+text = "Strike"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Item1" type="Label" parent="Char1/MenuBox"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -51.0
+offset_right = 56.0
+offset_bottom = -34.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_fipie")
+theme_override_font_sizes/font_size = 10
+text = "Magic"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Item2" type="Label" parent="Char1/MenuBox"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -35.0
+offset_right = 56.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_fipie")
+theme_override_font_sizes/font_size = 10
+text = "Buff  ATK"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Item3" type="Label" parent="Char1/MenuBox"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -19.0
+offset_right = 56.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_fipie")
+theme_override_font_sizes/font_size = 10
+text = "Defend"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Char1/MenuBox"]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = 15.0
+offset_bottom = 15.0
+texture = ExtResource("3_fd6kp")
+
+[node name="Char2" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = -24.0
+offset_right = 128.0
+offset_bottom = 72.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="NamePlate" type="NinePatchRect" parent="Char2"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 2.0
+offset_right = 103.0
+offset_bottom = 22.0
+texture = ExtResource("1_la0hm")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="Text" type="Label" parent="Char2/NamePlate"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -29.0
+offset_top = -19.0
+offset_right = 29.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_fipie")
+theme_override_font_sizes/font_size = 10
+text = "Minotaur"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MenuBox" type="NinePatchRect" parent="Char2"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 25.0
+offset_right = 127.0
+offset_bottom = 95.0
+texture = ExtResource("1_la0hm")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="Item0" type="Label" parent="Char2/MenuBox"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -67.0
+offset_right = 56.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_fipie")
+theme_override_font_sizes/font_size = 10
+text = "Strike"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Item1" type="Label" parent="Char2/MenuBox"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -51.0
+offset_right = 56.0
+offset_bottom = -34.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_fipie")
+theme_override_font_sizes/font_size = 10
+text = "Magic"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Item2" type="Label" parent="Char2/MenuBox"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -35.0
+offset_right = 56.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_fipie")
+theme_override_font_sizes/font_size = 10
+text = "Buff  ATK"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Item3" type="Label" parent="Char2/MenuBox"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -19.0
+offset_right = 56.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_fipie")
+theme_override_font_sizes/font_size = 10
+text = "Defend"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Char2/MenuBox"]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = 15.0
+offset_bottom = 15.0
+texture = ExtResource("3_fd6kp")
+
+[node name="Char3" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 128.0
+offset_top = -24.0
+offset_right = 256.0
+offset_bottom = 72.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="NamePlate" type="NinePatchRect" parent="Char3"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 2.0
+offset_right = 103.0
+offset_bottom = 22.0
+texture = ExtResource("1_la0hm")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="Text" type="Label" parent="Char3/NamePlate"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -29.0
+offset_top = -19.0
+offset_right = 29.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_fipie")
+theme_override_font_sizes/font_size = 10
+text = "Minotaur"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MenuBox" type="NinePatchRect" parent="Char3"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 25.0
+offset_right = 127.0
+offset_bottom = 95.0
+texture = ExtResource("1_la0hm")
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="Item0" type="Label" parent="Char3/MenuBox"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -67.0
+offset_right = 56.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_fipie")
+theme_override_font_sizes/font_size = 10
+text = "Strike"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Item1" type="Label" parent="Char3/MenuBox"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -51.0
+offset_right = 56.0
+offset_bottom = -34.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_fipie")
+theme_override_font_sizes/font_size = 10
+text = "Magic"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Item2" type="Label" parent="Char3/MenuBox"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -35.0
+offset_right = 56.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_fipie")
+theme_override_font_sizes/font_size = 10
+text = "Buff  ATK"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Item3" type="Label" parent="Char3/MenuBox"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -19.0
+offset_right = 56.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_fipie")
+theme_override_font_sizes/font_size = 10
+text = "Defend"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Char3/MenuBox"]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = 15.0
+offset_bottom = 15.0
+texture = ExtResource("3_fd6kp")
