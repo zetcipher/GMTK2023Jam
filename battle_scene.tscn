@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://vpvlwul3rmxi"]
+[gd_scene load_steps=6 format=3 uid="uid://vpvlwul3rmxi"]
 
 [ext_resource type="PackedScene" uid="uid://dqtt87mt1yiwd" path="res://hud.tscn" id="1_b26gb"]
 [ext_resource type="Script" path="res://battle_scene.gd" id="1_cch4f"]
 [ext_resource type="PackedScene" uid="uid://be5vj4g8fyflp" path="res://objects/actor.tscn" id="1_uprfe"]
 [ext_resource type="PackedScene" uid="uid://kep4cxgdd557" path="res://battle_feed.tscn" id="2_lgo8j"]
+[ext_resource type="PackedScene" uid="uid://cdfegrvsn5cps" path="res://interface.tscn" id="4_mbg84"]
 
 [node name="BattleScene" type="Control" node_paths=PackedStringArray("main_party", "enemy_party")]
 layout_mode = 3
@@ -23,9 +24,13 @@ layout_mode = 1
 metadata/_edit_lock_ = true
 
 [node name="BattleFeed" parent="." instance=ExtResource("2_lgo8j")]
+visible = false
 z_index = 2
 layout_mode = 1
 metadata/_edit_lock_ = true
+
+[node name="Interface" parent="." instance=ExtResource("4_mbg84")]
+layout_mode = 1
 
 [node name="MainParty" type="Node2D" parent="."]
 

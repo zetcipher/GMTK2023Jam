@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://cdfegrvsn5cps"]
+[gd_scene load_steps=5 format=3 uid="uid://cdfegrvsn5cps"]
 
 [ext_resource type="Texture2D" uid="uid://1t1sofhvhs2i" path="res://rect.png" id="1_la0hm"]
+[ext_resource type="Script" path="res://interface.gd" id="1_tggl2"]
 [ext_resource type="FontFile" uid="uid://s8mmcs2jde8j" path="res://n90gamefont.ttf" id="2_fipie"]
 [ext_resource type="Texture2D" uid="uid://dbnrgpnifhgg7" path="res://arrow.png" id="3_fd6kp"]
 
@@ -12,6 +13,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_tggl2")
 metadata/_edit_lock_ = true
 
 [node name="Char0" type="Control" parent="."]
@@ -147,7 +149,7 @@ text = "Defend"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="Char0/MenuBox"]
+[node name="Cursor" type="TextureRect" parent="Char0/MenuBox"]
 layout_mode = 0
 offset_left = 7.0
 offset_top = 7.0
@@ -286,7 +288,7 @@ text = "Defend"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="Char1/MenuBox"]
+[node name="Cursor" type="TextureRect" parent="Char1/MenuBox"]
 layout_mode = 0
 offset_left = 7.0
 offset_top = 7.0
@@ -301,9 +303,8 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_top = -24.0
+offset_top = -96.0
 offset_right = 128.0
-offset_bottom = 72.0
 grow_horizontal = 2
 grow_vertical = 0
 
@@ -426,7 +427,7 @@ text = "Defend"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="Char2/MenuBox"]
+[node name="Cursor" type="TextureRect" parent="Char2/MenuBox"]
 layout_mode = 0
 offset_left = 7.0
 offset_top = 7.0
@@ -442,9 +443,8 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = 128.0
-offset_top = -24.0
+offset_top = -96.0
 offset_right = 256.0
-offset_bottom = 72.0
 grow_horizontal = 2
 grow_vertical = 0
 
@@ -567,7 +567,7 @@ text = "Defend"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="Char3/MenuBox"]
+[node name="Cursor" type="TextureRect" parent="Char3/MenuBox"]
 layout_mode = 0
 offset_left = 7.0
 offset_top = 7.0

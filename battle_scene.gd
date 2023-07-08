@@ -14,9 +14,11 @@ var actors_ordered : Array[Actor]
 
 @onready var hud := $HUD as HUD
 @onready var feed := $BattleFeed as BattleFeed
+@onready var menu := $Interface as Interface
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	randomize()
 	get_window().size *= 3
 	
 	feed.clear_lines()
@@ -24,6 +26,9 @@ func _ready():
 	update_hud()
 	sort_actors()
 	determine_actions()
+	
+	menu.init_pages(enemy_party)
+	menu.update_cursor()
 	
 	acting = false
 
