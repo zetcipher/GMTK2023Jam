@@ -1,4 +1,4 @@
-extends Control
+class_name HUD extends Control
 
 var hero_names : Array[String] = ["PumpyClumpy", "ZingyZonger", "YoMama", "D.N."]
 

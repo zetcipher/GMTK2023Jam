@@ -1,4 +1,4 @@
-extends Control
+class_name BattleFeed extends Control
 
 var lines : Array[String] = ["", "", "", ""]
 
