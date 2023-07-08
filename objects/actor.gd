@@ -29,9 +29,13 @@ func _ready():
 	if face_right:
 		$CharSprite.flip_h = true
 		$MonSprite.flip_h = true
+		$Skill.position.x -= 8
+		$hpbar.position.x += 16
 	else:
 		$CharSprite.flip_h = false
 		$MonSprite.flip_h = false
+		$Skill.position.x += 8
+		$hpbar.position.x -= 16
 	
 	if not monster:
 		set_anim("idle")
@@ -56,7 +60,9 @@ func set_sprites():
 			2: $CharSprite.texture = preload("res://svb_future2.png")
 			3: $CharSprite.texture = preload("res://svb_future3.png")
 			4: $CharSprite.texture = preload("res://svb_future4.png")
-			_: $CharSprite.texture = preload("res://4_5.png")
+			_: 
+				$CharSprite.texture = preload("res://4_5.png")
+				$hpbar.hide()
 	
 	if monster:
 		match sprite_set:
