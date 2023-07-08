@@ -40,7 +40,7 @@ func _process(delta):
 			for actor in enemy_party:
 				if actor.HP <= 0: 
 					feed.add_line(str("[color=", actor.name_color.to_html(), "]", actor.char_name, "[/color]", " has been felled!"))
-					main_party.erase(actor)
+					enemy_party.erase(actor)
 					actors.erase(actor)
 			determine_actions()
 			
@@ -119,19 +119,35 @@ func execute_action(actor: Actor, target: Actor):
 	actor.last_action = actor.next_action
 	if action != Skills.HEAL_ALL:
 		target.change_hp(-damage)
+		if action != Skills.HEAL_ONE:
+			create_popoff(target.position, damage, 0)
+		else:
+			create_popoff(target.position, damage, 1)
 	else:
 		if main_party.has(actor):
-			for p in main_party: p.change_hp(-damage)
+			for p in main_party: 
+				p.change_hp(damage)
+				create_popoff(p.position, damage, 1)
 		else:
-			for p in enemy_party: p.change_hp(-damage)
+			for p in enemy_party: 
+				p.change_hp(damage)
+				create_popoff(p.position, damage, 1)
+	
 
+func create_popoff(pos: Vector2, dmg: int, type := 0):
+	var popoff := preload("res://popoff.tscn").instantiate()
+	popoff.position = pos
+	popoff.text = str(dmg)
+	popoff.type = type
+	add_child(popoff)
+	
 
 func calc_damage(atk: int, def: int, type := 0) -> int:
 	var dmg: int = 0
 	if type == 2: 
 		dmg = atk - def # magic
 		if dmg < 1: dmg = 1
-	if type == 3: dmg = -atk
+	if type == 3: dmg = atk # healing
 	else: 
 		dmg = atk * 2 - def
 		if dmg < 1: dmg = 1
@@ -153,9 +169,9 @@ func send_line_to_feed(actor: Actor, target: Actor, action: Skills, damage := 0)
 		Skills.DEFEND: 
 			feed.add_line(str(act_str, " is defending..."))
 		Skills.HEAL_ONE:
-			feed.add_line(str(act_str, " healed ", tgt_str, " for [b]", -damage, "[/b] HP!"))
+			feed.add_line(str(act_str, " healed ", tgt_str, " for [b]", damage, "[/b] HP!"))
 		Skills.HEAL_ALL:
-			feed.add_line(str(act_str, " healed their party for [b]", -damage, "[/b] HP!"))
+			feed.add_line(str(act_str, " healed their party for [b]", damage, "[/b] HP!"))
 		Skills.BUFF_ATK:
 			feed.add_line(str(act_str, " gave a strength buff to ", tgt_str, "!"))
 		Skills.BUFF_EVA:

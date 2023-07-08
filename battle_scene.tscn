@@ -22,6 +22,7 @@ layout_mode = 1
 metadata/_edit_lock_ = true
 
 [node name="BattleFeed" parent="." instance=ExtResource("2_lgo8j")]
+z_index = 2
 layout_mode = 1
 metadata/_edit_lock_ = true
 
