@@ -7,6 +7,7 @@ enum Skills {MELEE, GUN, MAGIC, DEFEND, HEAL_ONE, HEAL_ALL, BUFF_ATK, BUFF_EVA}
 @export var monster := false
 @export var sprite_set := 0
 @export var face_right := false
+@export var cant_be_targeted := false
 
 @export var MHP := 100
 @export var ATK := 10
