@@ -20,6 +20,7 @@ enum Skills {MELEE, GUN, MAGIC, DEFEND, HEAL_ONE, HEAL_ALL, BUFF_ATK, BUFF_EVA}
 var HP := 999999
 
 @export var set_skills : Array[Skills] = [Skills.MELEE, Skills.BUFF_ATK, Skills.DEFEND]
+var next_action := 0
 
 func _ready():
 	set_sprites()
