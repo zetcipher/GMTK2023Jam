@@ -12,6 +12,7 @@ func clear_lines():
 func add_line(text : String):
 	lines.pop_front()
 	lines.append(text)
+	print(text)
 	update_text()
 
 func update_text():

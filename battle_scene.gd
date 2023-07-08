@@ -207,8 +207,8 @@ func sort_actors_by_defending():
 	for actor in actors:
 		if actor.set_skills[actor.next_action] != Skills.DEFEND:
 			actors_ordered.append(actor)
-	print(actors)
-	print(actors_ordered)
+#	print(actors)
+#	print(actors_ordered)
 
 
 func update_hud():
