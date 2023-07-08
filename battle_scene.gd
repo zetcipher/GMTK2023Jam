@@ -71,6 +71,14 @@ func _process(delta):
 		menu.show()
 
 
+func override_action(a_idx: int, slot_idx: int, tgt_idx: int, tgt_is_hero: bool):
+	var actor : Actor = enemy_party[a_idx]
+	actor.next_action = slot_idx
+	if tgt_is_hero: actor.target = main_party[tgt_idx]
+	else: actor.target = enemy_party[tgt_idx]
+	acting = true
+
+
 func get_party_HP_percentage(heroes: bool) -> float:
 	var total_MHP := 1
 	var total_HP := 1
