@@ -31,4 +31,11 @@ func update_heroes():
 		label.text = str(heroHP[idx], "/", heroMHP[idx])
 		bar.max_value = heroMHP[idx]
 		bar.value = heroHP[idx]
+		if get_percentage(heroHP[idx], heroMHP[idx]) < 0.25: label.modulate = Color(1.0, 0.0, 0.0)
+		elif get_percentage(heroHP[idx], heroMHP[idx]) < 0.5: label.modulate = Color(1.0, 1.0, 0.0)
+		else: label.modulate = Color(1.0, 1.0, 1.0)
 		idx += 1
+
+
+func get_percentage(a: int, b: int) -> float:
+	return float(a) / float(b)
