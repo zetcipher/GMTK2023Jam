@@ -3,6 +3,7 @@ extends Control
 enum Skills {MELEE, GUN, MAGIC, DEFEND, HEAL_ONE, HEAL_ALL, BUFF_ATK, BUFF_EVA}
 
 var turn := 0
+var wait_time := 0.0
 var acting := false
 
 @export var main_party : Array[Actor]
@@ -26,11 +27,14 @@ func _ready():
 
 
 func _process(delta):
-	if turn == 0:
-		determine_actions()
-	execute_action(actors[turn], actors.pick_random())
-	turn += 1
-	if turn > actors.size() - 1: turn = 0
+	if wait_time <= 0.0:
+		if turn == 0:
+			determine_actions()
+		execute_action(actors[turn], actors.pick_random())
+		turn += 1
+		if turn > actors.size() - 1: turn = 0
+		wait_time = 1.0
+	wait_time -= delta
 
 
 func determine_actions():
@@ -69,26 +73,26 @@ func calc_damage(atk: int, def: int, type := 0) -> int:
 
 
 func send_line_to_feed(actor: Actor, target: Actor, action: Skills, damage := 0):
-	var act_str := str("[color=", actor.name_color, "]", actor.char_name, "[/color]")
-	var tgt_str := str("[color=", target.name_color, "]", target.char_name, "[/color]")
+	var act_str := str("[color=", actor.name_color.to_html(false), "]", actor.char_name, "[/color]")
+	var tgt_str := str("[color=", target.name_color.to_html(false), "]", target.char_name, "[/color]")
 	
 	match action:
 		Skills.GUN:
-			feed.add_line(str(act_str, " shot at ", tgt_str, " for ", damage, "damage!"))
+			feed.add_line(str(act_str, " shot at ", tgt_str, " for [b]", damage, "[/b] damage!"))
 		Skills.MAGIC:
-			feed.add_line(str(act_str, " cast a spell at ", tgt_str, " for ", damage, "damage!"))
+			feed.add_line(str(act_str, " cast a spell at ", tgt_str, " for [b]", damage, "[/b] damage!"))
 		Skills.DEFEND: 
 			feed.add_line(str(act_str, " is defending..."))
 		Skills.HEAL_ONE:
-			feed.add_line(str(act_str, " healed ", tgt_str, " for ", damage, "HP!"))
+			feed.add_line(str(act_str, " healed ", tgt_str, " for [b]", damage, " HP!"))
 		Skills.HEAL_ALL:
-			feed.add_line(str(act_str, " healed their party for ", damage, "HP!"))
+			feed.add_line(str(act_str, " healed their party for [b]", damage, " HP!"))
 		Skills.BUFF_ATK:
 			feed.add_line(str(act_str, " gave a strength buff to ", tgt_str, "!"))
 		Skills.BUFF_EVA:
 			feed.add_line(str(act_str, " gave an evasion buff to ", tgt_str, "!"))
 		_:
-			feed.add_line(str(act_str, " struck ", tgt_str, " for ", damage, "damage!"))
+			feed.add_line(str(act_str, " struck ", tgt_str, " for [b]", damage, "[/b] damage!"))
 	
 
 
