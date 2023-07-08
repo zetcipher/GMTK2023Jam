@@ -10,7 +10,7 @@ var acting := false
 @export var enemy_party : Array[Actor]
 
 var actors : Array[Actor]
-var defenders : Array[Actor]
+var actors_ordered : Array[Actor]
 
 @onready var hud := $HUD as HUD
 @onready var feed := $BattleFeed as BattleFeed
@@ -43,11 +43,11 @@ func _process(delta):
 					enemy_party.erase(actor)
 					actors.erase(actor)
 			determine_actions()
-			
-			
 			for actor in actors: actor.target = determine_target(actor)
+			sort_actors_by_defending()
 		
-		execute_action(actors[turn], actors[turn].target)
+		
+		execute_action(actors_ordered[turn], actors_ordered[turn].target)
 		turn += 1
 		if turn > actors.size() - 1: turn = 0
 		wait_time = 0.25
@@ -198,7 +198,17 @@ func sort_actors(): # This function sorts actors by speed, highest first, lowest
 #	print(speeds)
 #	print(fastest_actors)
 	actors = fastest_actors
-	
+
+func sort_actors_by_defending():
+	actors_ordered = []
+	for actor in actors:
+		if actor.set_skills[actor.next_action] == Skills.DEFEND:
+			actors_ordered.append(actor)
+	for actor in actors:
+		if actor.set_skills[actor.next_action] != Skills.DEFEND:
+			actors_ordered.append(actor)
+	print(actors)
+	print(actors_ordered)
 
 
 func update_hud():
