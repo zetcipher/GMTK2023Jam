@@ -29,12 +29,12 @@ func _ready():
 	if face_right:
 		$CharSprite.flip_h = true
 		$MonSprite.flip_h = true
-		$Skill.position.x -= 8
+		$Skill.position.x -= 12
 		$hpbar.position.x += 16
 	else:
 		$CharSprite.flip_h = false
 		$MonSprite.flip_h = false
-		$Skill.position.x += 8
+		$Skill.position.x += 12
 		$hpbar.position.x -= 24
 	
 	if not monster:

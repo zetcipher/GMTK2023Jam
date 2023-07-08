@@ -1,15 +1,28 @@
 class_name Interface extends Control
 
+signal action_requested(actor_idx: int, skill_slot: int, target_idx: int, hero: bool)
+signal set_target_cursor(actor_idx: int, hero: bool)
+
 enum Skills {MELEE, GUN, MAGIC, DEFEND, HEAL_ONE, HEAL_ALL, BUFF_ATK, BUFF_EVA}
 
 var active := true
 
+var selecting_target := false
+var heroes := 1
+var monsters := 1
+
 var cursor_idx := Vector2i.ZERO
 var max_idx := Vector2i.ZERO
 
+var target_idx := 0
+var target_heroes := true
+
 var pages : Array[String] = []
+var char0_skills : Array[Skills] = []
+var char1_skills : Array[Skills] = []
+var char3_skills : Array[Skills] = []
 var inactive_pages : Array[int] = []
-var skill_names : Array[String] = ["Strike", "Shoot", "Magic", "Defend", "Heal  One", "Team  Heal", "Buff  ATK", "Buff  EVA"]
+var skill_names : Array[String] = ["Strike", "Shoot", "Lightning", "Defend", "Heal  One", "Team  Heal", "Buff  ATK", "Buff  EVA"]
 var action_names : Array[String] = ["Do  Nothing", "Hero  Hijack", "Flee  Battle"]
 
 # Called when the node enters the scene tree for the first time.
@@ -21,11 +34,53 @@ func _ready():
 func _process(delta):
 	if not active: return
 	
-	if Input.is_action_just_pressed("ui_left"): move_cursor(Vector2i.LEFT)
-	if Input.is_action_just_pressed("ui_right"): move_cursor(Vector2i.RIGHT)
-	if Input.is_action_just_pressed("ui_up"): move_cursor(Vector2i.UP)
-	if Input.is_action_just_pressed("ui_down"): move_cursor(Vector2i.DOWN)
+	if not selecting_target:
+		if Input.is_action_just_pressed("ui_left"): move_cursor(Vector2i.LEFT)
+		if Input.is_action_just_pressed("ui_right"): move_cursor(Vector2i.RIGHT)
+		if Input.is_action_just_pressed("ui_up"): move_cursor(Vector2i.UP)
+		if Input.is_action_just_pressed("ui_down"): move_cursor(Vector2i.DOWN)
+	
+		if Input.is_action_just_pressed("ui_accept"):
+			if cursor_idx.x == max_idx.x:
+				pass # summoner actions
+				return
+		
+			match get_skill():
+				Skills.DEFEND or Skills.HEAL_ALL:
+					emit_signal("action_requested", cursor_idx.x, cursor_idx.y, cursor_idx.x)
+					return
+				Skills.HEAL_ONE or Skills.BUFF_ATK or Skills.BUFF_EVA:
+					selecting_target = true
+					target_heroes = false
+					return
+				_:
+					selecting_target = true
+					target_heroes = true
+					return
+	
+	if selecting_target:
+		if Input.is_action_just_pressed("ui_up"): move_target_cursor(true)
+		if Input.is_action_just_pressed("ui_down"): move_target_cursor(false)
+		
+		if Input.is_action_just_pressed("ui_cancel"):
+			selecting_target = false
+			return
+		
+		if Input.is_action_just_pressed("ui_accept"):
+			emit_signal("action_requested", cursor_idx.x, cursor_idx.y, target_idx, target_heroes)
+			return
+	
 
+func move_target_cursor(up: bool):
+	if up: target_idx -= 1
+	else: target_idx += 1
+	if target_idx < 0:
+		if target_heroes: target_idx = heroes
+		else: target_idx = monsters
+	elif target_heroes and target_idx > heroes: target_idx = 0
+	elif not target_heroes and target_idx > monsters: target_idx = 0
+	
+	emit_signal("set_target_cursor", target_idx, target_heroes)
 
 func move_cursor(dir: Vector2i):
 	cursor_idx += dir
@@ -44,6 +99,9 @@ func update_cursor():
 		if child.name.ends_with(str(cursor_idx.x)): child.position.y = 264
 		else: child.position.y = 336
 
+func get_skill() -> Skills:
+	var skillset : Array[Skills] = get(str("char",cursor_idx.x,"_skills"))
+	return skillset[cursor_idx.y]
 
 func init_pages(actors: Array[Actor]):
 	pages.resize(actors.size())
@@ -60,6 +118,7 @@ func setup_page(idx: int, actor: Actor):
 		if not get_node(str("Char", idx, "/MenuBox/Item", i)) is Label: continue
 		var label := get_node(str("Char", idx, "/MenuBox/Item", i)) as Label
 		label.text = skill_names[actor.set_skills[i]]
+	set(str("char",idx,"_skills"), actor.set_skills)
 
 func setup_last():
 	pages.append("Other")

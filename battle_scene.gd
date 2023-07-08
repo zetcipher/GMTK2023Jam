@@ -3,6 +3,7 @@ extends Control
 enum Skills {MELEE, GUN, MAGIC, DEFEND, HEAL_ONE, HEAL_ALL, BUFF_ATK, BUFF_EVA}
 
 var turn := 0
+var cycles := 0
 var wait_time := 0.0
 var acting := false
 
@@ -36,6 +37,7 @@ func _ready():
 func _process(delta):
 	if wait_time <= 0.0 and acting:
 		if turn == 0:
+			feed.clear_lines()
 			for actor in main_party:
 				if actor.HP <= 0: 
 					feed.add_line(str("[color=", actor.name_color.to_html(), "]", actor.char_name, "[/color]", " has fallen..."))
@@ -54,12 +56,19 @@ func _process(delta):
 		
 		execute_action(actors_ordered[turn], actors_ordered[turn].target)
 		turn += 1
-		if turn > actors.size() - 1: turn = 0
+		if turn > actors.size() - 1: 
+			turn = 0
+			cycles += 1
 		wait_time = 0.25
 	if Input.is_action_just_pressed("ui_accept"): wait_time = 0.0
 	
-	if acting: feed.show()
-	else: feed.hide()
+	if acting: 
+		feed.show()
+		menu.hide()
+		menu.active = false
+	else: 
+		feed.hide()
+		menu.show()
 
 
 func get_party_HP_percentage(heroes: bool) -> float:
@@ -172,7 +181,7 @@ func send_line_to_feed(actor: Actor, target: Actor, action: Skills, damage := 0)
 		Skills.GUN:
 			feed.add_line(str(act_str, " shot at ", tgt_str, " for [b]", damage, "[/b] damage!"))
 		Skills.MAGIC:
-			feed.add_line(str(act_str, " cast a spell at ", tgt_str, " for [b]", damage, "[/b] damage!"))
+			feed.add_line(str(act_str, " cast lightning at ", tgt_str, " for [b]", damage, "[/b] damage!"))
 		Skills.DEFEND: 
 			feed.add_line(str(act_str, " is defending..."))
 		Skills.HEAL_ONE:
