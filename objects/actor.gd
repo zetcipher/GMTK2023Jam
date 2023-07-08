@@ -35,7 +35,7 @@ func _ready():
 		$CharSprite.flip_h = false
 		$MonSprite.flip_h = false
 		$Skill.position.x += 8
-		$hpbar.position.x -= 16
+		$hpbar.position.x -= 24
 	
 	if not monster:
 		set_anim("idle")
@@ -76,6 +76,7 @@ func change_hp(amount: int):
 	if HP < 0: HP = 0
 	$hpbar.max_value = MHP
 	$hpbar.value = HP
+	$hpbar/HP.text = str(HP, "/", MHP)
 
 func set_anim(anim_name: String):
 	$CharAnimator.play(anim_name)
