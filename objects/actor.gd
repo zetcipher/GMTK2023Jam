@@ -21,6 +21,7 @@ var HP := 999999
 
 @export var set_skills : Array[Skills] = [Skills.MELEE, Skills.BUFF_ATK, Skills.DEFEND]
 var next_action := 0
+var last_action := -1
 
 func _ready():
 	set_sprites()
