@@ -49,6 +49,23 @@ theme_override_font_sizes/font_size = 10
 text = "ZetCipher's 2023 GMTK Game Jam Entry"
 horizontal_alignment = 1
 
+[node name="Label4" type="Label" parent="Title"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -96.0
+offset_top = -123.0
+offset_right = 96.0
+offset_bottom = -106.0
+grow_horizontal = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 10
+text = "Use PgUp & PgDown to quickly change window size."
+horizontal_alignment = 1
+
 [node name="Label2" type="Label" parent="Title"]
 layout_mode = 1
 anchors_preset = 8
