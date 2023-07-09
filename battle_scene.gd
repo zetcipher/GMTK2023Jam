@@ -45,6 +45,8 @@ func _process(delta):
 			cycles += 1
 			conclude_turn()
 			acting = false
+			menu.cursor_idx = Vector2i.ZERO
+			menu.update_cursor()
 			menu.selecting_target = false
 			menu.active = true
 		else: wait_time = 0.25
@@ -62,6 +64,9 @@ func _process(delta):
 
 func construct_turn(completely_random := false):
 	determine_actions(completely_random)
+	for i in range(enemy_party.size()):
+		var actor : Actor = enemy_party[i]
+		menu.locked_skills[i] = actor.last_action
 	for actor in actors: 
 		actor.target = determine_target(actor)
 		actor.set_tgt_icon(actor.target.sprite_set, !actor.target.monster)

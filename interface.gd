@@ -21,7 +21,7 @@ var pages : Array[String] = []
 var char0_skills : Array[Skills] = []
 var char1_skills : Array[Skills] = []
 var char2_skills : Array[Skills] = []
-var inactive_pages : Array[int] = []
+var locked_skills : Array[int] = [-1, -1, -1, -1]
 var skill_names : Array[String] = ["Strike", "Shoot", "Lightning", "Defend", "Heal  One", "Team  Heal", "Buff  ATK", "Buff  EVA"]
 var action_names : Array[String] = ["Do  Nothing", "Hero  Hijack", "Flee  Battle"]
 
@@ -43,6 +43,9 @@ func _process(delta):
 		if Input.is_action_just_pressed("ui_accept"):
 			if cursor_idx.x == max_idx.x:
 				pass # summoner actions
+				return
+			
+			if locked_skills[cursor_idx.x] == cursor_idx.y:
 				return
 			
 			var skill := get_skill() as Skills
@@ -106,6 +109,8 @@ func update_cursor():
 		cursor.position.y = 7 + (cursor_idx.y * 16)
 		if child.name.ends_with(str(cursor_idx.x)): child.position.y = 264
 		else: child.position.y = 336
+		if cursor_idx.y == locked_skills[cursor_idx.x]: cursor.modulate = Color(1.0, 0.0, 0.0)
+		else: cursor.modulate = Color(1.0, 1.0, 1.0)
 
 func get_skill() -> Skills:
 	var skillset : Array[Skills] = get(str("char",cursor_idx.x,"_skills"))
