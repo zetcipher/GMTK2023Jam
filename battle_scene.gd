@@ -4,6 +4,7 @@ enum Skills {MELEE, GUN, MAGIC, DEFEND, HEAL_ONE, HEAL_ALL, BUFF_ATK, BUFF_EVA}
 
 var turn := 0
 var cycles := 0
+var solo_knight_cycles := 0
 var wait_time := 0.0
 var acting := false
 
@@ -66,6 +67,9 @@ func _process(delta):
 			3: # heroes were killed
 				$ClearScreen/Label5.text = "The monsters defeated the heroes. You've lost your money and your pride..."
 				$ClearScreen/Label2.text = "YOU LOSE"
+			4: # healer knight stalemate
+				$ClearScreen/Label5.text = "This wasn't gonna end anytime soon. Whether this counts as a win or a loss is up to you, pal."
+				$ClearScreen/Label2.text = "YOU"
 			_: # generic
 				$ClearScreen/Label5.text = "Did I mess up? Did you mess up? Don't know, but either way you weren't supposed to see this."
 				$ClearScreen/Label2.text = "YOU... uh..."
@@ -74,6 +78,13 @@ func _process(delta):
 	
 	if fled_battle and $EnemyParty/Actor8.position.x < 700:
 		$EnemyParty/Actor8.position.x += 120 * delta
+	
+	if solo_knight_cycles > 9:
+		clear_type = 4
+		game_over = true
+		menu.hide()
+		feed.hide()
+		return
 	
 	if main_party.size() < 1:
 		clear_type = 3
@@ -89,10 +100,13 @@ func _process(delta):
 		feed.hide()
 		return
 	
-	if wait_time <= 0.0 and acting:
+	if wait_time <= 0.0 and acting and not game_over:
 		if turn > actors.size(): 
 			turn = 0
 			cycles += 1
+			if enemy_party.size() == 1 and fled_battle:
+				if enemy_party[0].char_name == "Knight":
+					solo_knight_cycles += 1
 			conclude_turn()
 			if not fled_battle:
 				acting = false
