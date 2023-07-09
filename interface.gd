@@ -43,9 +43,12 @@ func _process(delta):
 		if Input.is_action_just_pressed("ui_accept"):
 			if cursor_idx.x == max_idx.x:
 				match cursor_idx.y:
-					1: emit_signal("action_requested", -2, -1, -1, false)
+					1: 
+						if locked_skills[monsters] != 1: emit_signal("action_requested", -2, -1, -1, false)
+						else: return
 					_:
 						emit_signal("action_requested", -1, -1, -1, false)
+						locked_skills[monsters] = -1
 				return
 			
 			if locked_skills[cursor_idx.x] == cursor_idx.y:
@@ -55,16 +58,19 @@ func _process(delta):
 			
 			match skill:
 				Skills.DEFEND, Skills.HEAL_ALL:
+					locked_skills[monsters] = -1
 					emit_signal("action_requested", cursor_idx.x, cursor_idx.y, cursor_idx.x, false)
 					return
 				Skills.HEAL_ONE, Skills.BUFF_ATK, Skills.BUFF_EVA:
 					selecting_target = true
 					target_heroes = false
+					locked_skills[monsters] = -1
 					emit_signal("set_target_cursor", target_idx, target_heroes)
 					return
 				_:
 					selecting_target = true
 					target_heroes = true
+					locked_skills[monsters] = -1
 					emit_signal("set_target_cursor", target_idx, target_heroes)
 					return
 	

@@ -116,6 +116,7 @@ func override_action(a_idx: int, slot_idx: int, tgt_idx: int, tgt_is_hero: bool)
 		start_turn()
 		return
 	if a_idx == -2:
+		menu.locked_skills[menu.monsters] = 1
 		do_smart_hero_actions()
 		var msg := randi_range(0, 3)
 		match msg:
