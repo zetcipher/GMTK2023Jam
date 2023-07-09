@@ -143,6 +143,7 @@ func construct_turn(completely_random := false):
 		menu.locked_skills[i] = actor.last_action
 	for actor in actors: 
 		actor.target = determine_target(actor)
+		actor.set_icon(actor.set_skills[actor.next_action])
 		actor.set_tgt_icon(actor.target.sprite_set, !actor.target.monster)
 
 func check_who_died():
@@ -184,6 +185,9 @@ func conclude_turn():
 		menu.hide()
 		feed.hide()
 		return
+	for actor in actors:
+		if actor.atk_buff_timer: actor.atk_buff_timer -= 1
+		if actor.eva_buff_timer: actor.eva_buff_timer -= 1
 	construct_turn()
 
 
@@ -387,26 +391,31 @@ func execute_action(actor: Actor, target: Actor):
 	var action := actor.set_skills[actor.next_action] as Skills
 	var damage := 0
 	var def_mult := 1
+	var dodgeable_skills : Array[int] = [0, 1, 2]
+	var missed := false
 	if target.set_skills[target.next_action] == Skills.DEFEND: def_mult = 3
 	match action:
 		Skills.GUN:
-			damage = calc_damage(actor.ATK, target.DEF * def_mult, 0)
+			damage = calc_damage(actor.get_true_ATK(), target.DEF * def_mult, 0)
 		Skills.MAGIC:
-			damage = calc_damage(actor.MAT, target.MDF * def_mult, 2)
+			damage = calc_damage(actor.get_true_MAT(), target.MDF * def_mult, 2)
 		Skills.DEFEND: 
 			pass # doesn't need a function
 		Skills.HEAL_ONE:
-			damage = -calc_damage(actor.MAT * 1.5, target.DEF, 3)
+			damage = -calc_damage(actor.get_true_MAT() * 1.5, target.DEF, 3)
 		Skills.HEAL_ALL:
-			damage = calc_damage(actor.MAT, target.DEF, 3)
+			damage = calc_damage(actor.get_true_MAT(), target.DEF, 3)
 		Skills.BUFF_ATK:
-			pass # BUFF FUNCTION
+			target.atk_buff_timer = 3
 		Skills.BUFF_EVA:
-			pass # BUFF FUNCTION
+			target.eva_buff_timer = 3
 		_:
-			damage = calc_damage(actor.ATK, target.DEF * def_mult, 0)
-	send_line_to_feed(actor, target, action, damage)
+			damage = calc_damage(actor.get_true_ATK(), target.DEF * def_mult, 0)
+	if dodgeable_skills.has(action):
+		missed = target.should_dodge()
+	send_line_to_feed(actor, target, action, damage, missed)
 	actor.last_action = actor.next_action
+	if missed: return
 	if action != Skills.HEAL_ALL and action != Skills.DEFEND:
 		target.change_hp(-damage)
 		if action != Skills.HEAL_ONE:
@@ -447,27 +456,41 @@ func calc_damage(atk: int, def: int, type := 0) -> int:
 	return dmg
 
 
-func send_line_to_feed(actor: Actor, target: Actor, action: Skills, damage := 0):
+func send_line_to_feed(actor: Actor, target: Actor, action: Skills, damage := 0, missed := false):
 	var act_str := str("[color=", actor.name_color.to_html(false), "]", actor.char_name, "[/color]")
 	var tgt_str := str("[color=", target.name_color.to_html(false), "]", target.char_name, "[/color]")
 	
+	var str1 := ""
+	var str2 := ""
+	
 	match action:
 		Skills.GUN:
-			feed.add_line(str(act_str, " shot at ", tgt_str, " for [b]", damage, "[/b] damage!"))
+			str1 = str(act_str, " shot at ", tgt_str)
+			str2 = str(" for [b]", damage, "[/b] damage!")
 		Skills.MAGIC:
-			feed.add_line(str(act_str, " cast lightning at ", tgt_str, " for [b]", damage, "[/b] damage!"))
+			str1 = str(act_str, " cast lightning at ", tgt_str)
+			str2 = str(" for [b]", damage, "[/b] damage!")
 		Skills.DEFEND: 
-			feed.add_line(str(act_str, " is defending..."))
+			str1 = str(act_str, " is defending...")
+			str2 = str("")
 		Skills.HEAL_ONE:
-			feed.add_line(str(act_str, " healed ", tgt_str, " for [b]", -damage, "[/b] HP!"))
+			str1 = str(act_str, " healed ", tgt_str, " for [b]", -damage, "[/b] HP!")
+			str2 = str("")
 		Skills.HEAL_ALL:
-			feed.add_line(str(act_str, " healed their party for [b]", damage, "[/b] HP!"))
+			str1 = str(act_str, " healed their party for [b]", damage, "[/b] HP!")
+			str2 = str("")
 		Skills.BUFF_ATK:
-			feed.add_line(str(act_str, " gave a strength buff to ", tgt_str, "!"))
+			str1 = str(act_str, " gave a strength buff to ", tgt_str, "!")
+			str2 = str("")
 		Skills.BUFF_EVA:
-			feed.add_line(str(act_str, " gave an evasion buff to ", tgt_str, "!"))
+			str1 = str(act_str, " gave an evasion buff to ", tgt_str, "!")
+			str2 = str("")
 		_:
-			feed.add_line(str(act_str, " struck ", tgt_str, " for [b]", damage, "[/b] damage!"))
+			str1 = str(act_str, " struck ", tgt_str)
+			str2 = str(" for [b]", damage, "[/b] damage!")
+	
+	if missed: str2 = " but the attack was dodged!"
+	feed.add_line(str1 + str2)
 	
 
 

@@ -35,12 +35,16 @@ func _ready():
 		$Skill.position.x -= 12
 		$Skill/Target.position.x -= 18
 		$hpbar.position.x += 16
+		$hpbar/atkbuff.position.x += 28
+		$hpbar/evabuff.position.x += 28
 	else:
 		$CharSprite.flip_h = false
 		$MonSprite.flip_h = false
 		$Skill.position.x += 12
 		$Skill/Target.position.x += 18
 		$hpbar.position.x -= 24
+		$hpbar/atkbuff.position.x -= 28
+		$hpbar/evabuff.position.x -= 28
 	
 	if not monster:
 		set_anim("idle")
@@ -51,6 +55,31 @@ func _ready():
 		$CharSprite.hide()
 		$MonSprite.play()
 	change_hp(0)
+
+func _process(_delta):
+	if atk_buff_timer: $hpbar/atkbuff.show()
+	else: $hpbar/atkbuff.hide()
+	if eva_buff_timer: $hpbar/evabuff.show()
+	else: $hpbar/evabuff.hide()
+
+func get_true_ATK() -> int:
+	var a = ATK
+	if atk_buff_timer: a *= 2
+	return a
+
+func get_true_MAT() -> int:
+	var a = MAT
+	if atk_buff_timer: a *= 2
+	return a
+
+func get_true_EVA() -> float:
+	var a = EVA
+	if eva_buff_timer: a = 0.75
+	return a
+
+func should_dodge() -> bool:
+	if randf_range(0.0, 1.0) >= get_true_EVA(): return false
+	else: return true
 
 func icon_vis(on: bool):
 	$Skill.visible = on
