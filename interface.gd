@@ -42,7 +42,10 @@ func _process(delta):
 	
 		if Input.is_action_just_pressed("ui_accept"):
 			if cursor_idx.x == max_idx.x:
-				pass # summoner actions
+				match cursor_idx.y:
+					1: emit_signal("action_requested", -2, -1, -1, false)
+					_:
+						emit_signal("action_requested", -1, -1, -1, false)
 				return
 			
 			if locked_skills[cursor_idx.x] == cursor_idx.y:

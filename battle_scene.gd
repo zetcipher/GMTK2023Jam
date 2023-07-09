@@ -112,6 +112,19 @@ func set_target_cursor(act_idx: int, hero: bool):
 
 
 func override_action(a_idx: int, slot_idx: int, tgt_idx: int, tgt_is_hero: bool):
+	if a_idx == -1:
+		start_turn()
+		return
+	if a_idx == -2:
+		do_smart_hero_actions()
+		var msg := randi_range(0, 3)
+		match msg:
+			1: feed.add_line("Someone whispered into the ears of the heroes!")
+			2: feed.add_line("The heroes might actually have a chance!")
+			3: feed.add_line("You don't have much confidence in them, do you?")
+			_: feed.add_line("The heroes are getting their act together this turn!")
+		return
+	
 	var actor : Actor = enemy_party[a_idx]
 	actor.next_action = slot_idx
 	if tgt_is_hero: actor.target = main_party[tgt_idx]
@@ -166,6 +179,68 @@ func determine_target(actor: Actor) -> Actor:
 	else: target = actors.pick_random() #failsafe
 	
 	return target
+
+
+func do_smart_hero_actions():
+	# if only healer is left, alternate between dealing damage and healing
+	if main_party.size() == 1 and main_party[0].char_name == "Delta":
+		var actor := main_party[0]
+		if actor.last_action == 0: 
+			actor.next_action = 1
+			actor.target = actor
+		else: 
+			actor.next_action == 0
+			actor.target = find_lowest_hp_actor(false)
+		actor.set_icon(actor.set_skills[actor.next_action])
+		actor.set_tgt_icon(actor.target.sprite_set, !actor.target.monster)
+	else:
+		for actor in main_party:
+			if actor.char_name == "Delta":
+				if get_party_HP_percentage(true) < 0.75:
+					if actor.last_action == 1:
+						actor.next_action == 2
+						actor.target = actor
+					else:
+						actor.next_action == 1
+						actor.target = find_lowest_hp_actor(true)
+				else:
+					if actor.last_action == 0:
+						actor.next_action = 3
+						actor.target = actor
+					else:
+						actor.next_action = 0
+						actor.target = find_lowest_hp_actor(false)
+				actor.set_icon(actor.set_skills[actor.next_action])
+				actor.set_tgt_icon(actor.target.sprite_set, !actor.target.monster)
+			else:
+				if actor.last_action != 0:
+					actor.next_action = 0
+				elif actor.last_action != 1:
+					actor.next_action = 1
+				actor.target = find_lowest_hp_actor(false)
+				actor.set_icon(actor.set_skills[actor.next_action])
+				actor.set_tgt_icon(actor.target.sprite_set, !actor.target.monster)
+	start_turn()
+
+
+
+func find_lowest_hp_actor(hero_side: bool) -> Actor:
+	var a : Actor
+	var lowest_hp := 999
+	
+	if not hero_side:
+		for actor in enemy_party:
+			if actor.HP < lowest_hp:
+				lowest_hp = actor.HP
+				a = actor
+	else:
+		for actor in main_party:
+			if actor.HP < lowest_hp:
+				lowest_hp = actor.HP
+				a = actor
+	
+	return a
+
 
 func execute_action(actor: Actor, target: Actor):
 	var action := actor.set_skills[actor.next_action] as Skills
