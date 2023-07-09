@@ -1,11 +1,13 @@
-[gd_scene load_steps=10 format=3 uid="uid://vpvlwul3rmxi"]
+[gd_scene load_steps=12 format=3 uid="uid://vpvlwul3rmxi"]
 
 [ext_resource type="PackedScene" uid="uid://dqtt87mt1yiwd" path="res://hud.tscn" id="1_b26gb"]
 [ext_resource type="Script" path="res://battle_scene.gd" id="1_cch4f"]
 [ext_resource type="PackedScene" uid="uid://be5vj4g8fyflp" path="res://objects/actor.tscn" id="1_uprfe"]
 [ext_resource type="PackedScene" uid="uid://kep4cxgdd557" path="res://battle_feed.tscn" id="2_lgo8j"]
+[ext_resource type="Texture2D" uid="uid://buoda1h5b8do6" path="res://bg0.png" id="2_yr66p"]
 [ext_resource type="PackedScene" uid="uid://cdfegrvsn5cps" path="res://interface.tscn" id="4_mbg84"]
 [ext_resource type="Texture2D" uid="uid://bj0un8vdjdvio" path="res://targeting_square.png" id="6_7db16"]
+[ext_resource type="PackedScene" uid="uid://dpw4q08ubc0oj" path="res://clear_screen.tscn" id="8_h6hod"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kwe6l"]
 atlas = ExtResource("6_7db16")
@@ -42,6 +44,15 @@ main_party = [NodePath("MainParty/Actor"), NodePath("MainParty/Actor2"), NodePat
 enemy_party = [NodePath("EnemyParty/Actor5"), NodePath("EnemyParty/Actor6"), NodePath("EnemyParty/Actor7")]
 metadata/_edit_lock_ = true
 
+[node name="TextureRect" type="TextureRect" parent="."]
+z_index = -2
+layout_mode = 0
+offset_top = -8.0
+offset_right = 640.0
+offset_bottom = 360.0
+texture = ExtResource("2_yr66p")
+metadata/_edit_lock_ = true
+
 [node name="HUD" parent="." instance=ExtResource("1_b26gb")]
 visible = false
 layout_mode = 1
@@ -59,7 +70,7 @@ layout_mode = 1
 [node name="MainParty" type="Node2D" parent="."]
 
 [node name="Actor" parent="MainParty" instance=ExtResource("1_uprfe")]
-position = Vector2(224, 120)
+position = Vector2(224, 128)
 char_name = "Alpha"
 sprite_set = 1
 face_right = true
@@ -69,7 +80,7 @@ DEF = 20
 set_skills = Array[int]([0, 1, 6, 3])
 
 [node name="Actor2" parent="MainParty" instance=ExtResource("1_uprfe")]
-position = Vector2(208, 152)
+position = Vector2(208, 160)
 char_name = "Bravo"
 sprite_set = 2
 face_right = true
@@ -80,7 +91,7 @@ SPD = 20
 set_skills = Array[int]([0, 1, 2, 3])
 
 [node name="Actor3" parent="MainParty" instance=ExtResource("1_uprfe")]
-position = Vector2(192, 184)
+position = Vector2(192, 192)
 char_name = "Charlie"
 sprite_set = 3
 face_right = true
@@ -90,7 +101,7 @@ SPD = 18
 set_skills = Array[int]([0, 1, 7, 3])
 
 [node name="Actor4" parent="MainParty" instance=ExtResource("1_uprfe")]
-position = Vector2(176, 216)
+position = Vector2(176, 224)
 char_name = "Delta"
 sprite_set = 4
 face_right = true
@@ -104,7 +115,7 @@ set_skills = Array[int]([2, 4, 5, 3])
 [node name="EnemyParty" type="Node2D" parent="."]
 
 [node name="Actor5" parent="EnemyParty" instance=ExtResource("1_uprfe")]
-position = Vector2(384, 136)
+position = Vector2(384, 144)
 char_name = "Bird"
 name_color = Color(1, 0.0666667, 0.333333, 1)
 monster = true
@@ -117,7 +128,7 @@ SPD = 30
 set_skills = Array[int]([0, 2, 7, 3])
 
 [node name="Actor6" parent="EnemyParty" instance=ExtResource("1_uprfe")]
-position = Vector2(408, 168)
+position = Vector2(408, 176)
 char_name = "Knight"
 name_color = Color(1, 0.0666667, 0.333333, 1)
 monster = true
@@ -131,7 +142,7 @@ SPD = 5
 set_skills = Array[int]([0, 4, 5, 3])
 
 [node name="Actor7" parent="EnemyParty" instance=ExtResource("1_uprfe")]
-position = Vector2(432, 200)
+position = Vector2(432, 208)
 char_name = "Minotaur"
 name_color = Color(1, 0.0666667, 0.333333, 1)
 monster = true
@@ -145,7 +156,7 @@ SPD = 15
 set_skills = Array[int]([0, 2, 6, 3])
 
 [node name="Actor8" parent="EnemyParty" instance=ExtResource("1_uprfe")]
-position = Vector2(472, 168)
+position = Vector2(472, 176)
 char_name = "Summoner"
 name_color = Color(0.737255, 0.45098, 0.870588, 1)
 cant_be_targeted = true
@@ -155,3 +166,8 @@ MHP = 10
 position = Vector2(-64, -64)
 sprite_frames = SubResource("SpriteFrames_tvlyx")
 frame_progress = 0.663656
+
+[node name="ClearScreen" parent="." instance=ExtResource("8_h6hod")]
+visible = false
+z_index = 5
+layout_mode = 1

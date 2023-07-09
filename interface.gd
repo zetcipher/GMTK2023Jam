@@ -46,6 +46,9 @@ func _process(delta):
 					1: 
 						if locked_skills[monsters] != 1: emit_signal("action_requested", -2, -1, -1, false)
 						else: return
+					2:
+						emit_signal("action_requested", -3, -1, -1, false)
+						return
 					_:
 						emit_signal("action_requested", -1, -1, -1, false)
 						locked_skills[monsters] = -1
@@ -159,6 +162,7 @@ func remove_page(idx: int): # this is a horrible way to do this, but this is a g
 	var i := 0
 	for child in get_children():
 		if child.name == "Dead": continue
+		set(str("char",i,"_skills"), get(str("char",child.get_index(),"_skills")))
 		child.name = "Char" + str(i)
 		i += 1
 	get_node("Dead").queue_free()

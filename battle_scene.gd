@@ -7,6 +7,11 @@ var cycles := 0
 var wait_time := 0.0
 var acting := false
 
+var fled_battle := false
+var game_over := false
+var clear_type := 0
+var can_exit := false
+
 @export var main_party : Array[Actor]
 @export var enemy_party : Array[Actor]
 
@@ -39,22 +44,87 @@ func _ready():
 
 
 func _process(delta):
+	if game_over:
+		if Input.is_action_just_pressed("ui_cancel"):
+			get_tree().change_scene_to_file("res://main_menu.tscn")
+		$ClearScreen/Label3.text = str("Scenario ended in ", cycles, " cycles")
+		match clear_type:
+			1: # win
+				$ClearScreen/Label5.text = "You escaped, and the heroes lived! Your bank account may be saved after all!"
+				$ClearScreen/Label2.text = "YOU WIN"
+			2: # didn't flee in time
+				$ClearScreen/Label5.text = "The heroes won, but you did not. Now you have no money AND no life!"
+				$ClearScreen/Label2.text = "YOU LOSE"
+			3: # heroes were killed
+				$ClearScreen/Label5.text = "The monsters defeated the heroes. You've lost your money and your pride..."
+				$ClearScreen/Label2.text = "YOU LOSE"
+			_: # generic
+				$ClearScreen/Label5.text = "Did I mess up? Did you mess up? Don't know, but either way you weren't supposed to see this."
+				$ClearScreen/Label2.text = "YOU... uh..."
+		$ClearScreen.show()
+		return
+	
+	if fled_battle and $EnemyParty/Actor8.position.x < 700:
+		$EnemyParty/Actor8.position.x += 120 * delta
+	
+	if main_party.size() < 1:
+		clear_type = 3
+		game_over = true
+		menu.hide()
+		feed.hide()
+		return
+	if enemy_party.size() < 1:
+		if fled_battle: clear_type = 1
+		else: clear_type = 2
+		game_over = true
+		menu.hide()
+		feed.hide()
+		return
+	
 	if wait_time <= 0.0 and acting:
 		if turn > actors.size(): 
 			turn = 0
 			cycles += 1
 			conclude_turn()
-			acting = false
-			menu.cursor_idx = Vector2i.ZERO
-			menu.update_cursor()
-			menu.selecting_target = false
-			menu.active = true
+			if not fled_battle:
+				acting = false
+				menu.cursor_idx = Vector2i.ZERO
+				menu.update_cursor()
+				menu.selecting_target = false
+				menu.active = true
 		else: wait_time = 0.25
 		if turn == actors.size(): check_who_died()
 		if turn < actors.size() and acting: 
+			if main_party.size() < 1:
+				clear_type = 3
+				game_over = true
+				menu.hide()
+				feed.hide()
+				return
+			if enemy_party.size() < 1:
+				if fled_battle: clear_type = 1
+				else: clear_type = 2
+				game_over = true
+				menu.hide()
+				feed.hide()
+				return
 			execute_action(actors_ordered[turn], actors_ordered[turn].target)
 		turn += 1
 	if Input.is_action_just_pressed("ui_accept"): wait_time = 0.0
+	
+	if main_party.size() < 1:
+		clear_type = 3
+		game_over = true
+		menu.hide()
+		feed.hide()
+		return
+	if enemy_party.size() < 1:
+		if fled_battle: clear_type = 1
+		else: clear_type = 2
+		game_over = true
+		menu.hide()
+		feed.hide()
+		return
 	
 	if acting: 
 		feed.show()
@@ -82,6 +152,8 @@ func check_who_died():
 			actor.set_anim("dead")
 			main_party.erase(actor)
 			actors.erase(actor)
+			actors_ordered.erase(actor)
+			actor.icon_vis(false)
 			menu.heroes = main_party.size()
 			menu.monsters = enemy_party.size()
 	for actor in enemy_party:
@@ -91,6 +163,7 @@ func check_who_died():
 			menu.max_idx.x -= 1
 			enemy_party.erase(actor)
 			actors.erase(actor)
+			actors_ordered.erase(actor)
 			actor.hide()
 			menu.heroes = main_party.size()
 			menu.monsters = enemy_party.size()
@@ -98,6 +171,19 @@ func check_who_died():
 
 func conclude_turn():
 	feed.clear_lines()
+	if main_party.size() < 1:
+		clear_type = 3
+		game_over = true
+		menu.hide()
+		feed.hide()
+		return
+	if enemy_party.size() < 1:
+		if fled_battle: clear_type = 1
+		else: clear_type = 2
+		game_over = true
+		menu.hide()
+		feed.hide()
+		return
 	construct_turn()
 
 
@@ -115,6 +201,11 @@ func set_target_cursor(act_idx: int, hero: bool):
 
 func override_action(a_idx: int, slot_idx: int, tgt_idx: int, tgt_is_hero: bool):
 	if a_idx == -1:
+		start_turn()
+		return
+	if a_idx == -3:
+		fled_battle = true
+		feed.add_line("You've fled the battle! Hopefully the heroes survive!")
 		start_turn()
 		return
 	if a_idx == -2:
@@ -305,7 +396,7 @@ func execute_action(actor: Actor, target: Actor):
 		Skills.DEFEND: 
 			pass # doesn't need a function
 		Skills.HEAL_ONE:
-			damage = calc_damage(actor.MAT * 1.5, target.DEF, 3)
+			damage = -calc_damage(actor.MAT * 1.5, target.DEF, 3)
 		Skills.HEAL_ALL:
 			damage = calc_damage(actor.MAT, target.DEF, 3)
 		Skills.BUFF_ATK:
@@ -368,7 +459,7 @@ func send_line_to_feed(actor: Actor, target: Actor, action: Skills, damage := 0)
 		Skills.DEFEND: 
 			feed.add_line(str(act_str, " is defending..."))
 		Skills.HEAL_ONE:
-			feed.add_line(str(act_str, " healed ", tgt_str, " for [b]", damage, "[/b] HP!"))
+			feed.add_line(str(act_str, " healed ", tgt_str, " for [b]", -damage, "[/b] HP!"))
 		Skills.HEAL_ALL:
 			feed.add_line(str(act_str, " healed their party for [b]", damage, "[/b] HP!"))
 		Skills.BUFF_ATK:

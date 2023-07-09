@@ -17,6 +17,9 @@ enum Skills {MELEE, GUN, MAGIC, DEFEND, HEAL_ONE, HEAL_ALL, BUFF_ATK, BUFF_EVA}
 @export var SPD := 10
 @export var EVA := 0.0
 
+var atk_buff_timer := 0
+var eva_buff_timer := 0
+
 var HP := 999999
 
 @export var set_skills : Array[Skills] = [Skills.MELEE, Skills.BUFF_ATK, Skills.DEFEND]
