@@ -52,10 +52,12 @@ func _process(delta):
 				Skills.HEAL_ONE or Skills.BUFF_ATK or Skills.BUFF_EVA:
 					selecting_target = true
 					target_heroes = false
+					emit_signal("set_target_cursor", target_idx, target_heroes)
 					return
 				_:
 					selecting_target = true
 					target_heroes = true
+					emit_signal("set_target_cursor", target_idx, target_heroes)
 					return
 	
 	if selecting_target:
@@ -64,9 +66,13 @@ func _process(delta):
 		
 		if Input.is_action_just_pressed("ui_cancel"):
 			selecting_target = false
+			target_idx = 0
+			emit_signal("set_target_cursor", -1, false)
 			return
 		
 		if Input.is_action_just_pressed("ui_accept"):
+			target_idx = 0
+			emit_signal("set_target_cursor", -1, false)
 			emit_signal("action_requested", cursor_idx.x, cursor_idx.y, target_idx, target_heroes)
 			return
 	
@@ -75,10 +81,10 @@ func move_target_cursor(up: bool):
 	if up: target_idx -= 1
 	else: target_idx += 1
 	if target_idx < 0:
-		if target_heroes: target_idx = heroes
-		else: target_idx = monsters
-	elif target_heroes and target_idx > heroes: target_idx = 0
-	elif not target_heroes and target_idx > monsters: target_idx = 0
+		if target_heroes: target_idx = heroes - 1
+		else: target_idx = monsters - 1
+	elif target_heroes and target_idx > heroes - 1: target_idx = 0
+	elif not target_heroes and target_idx > monsters - 1: target_idx = 0
 	
 	emit_signal("set_target_cursor", target_idx, target_heroes)
 

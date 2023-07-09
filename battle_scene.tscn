@@ -1,12 +1,36 @@
-[gd_scene load_steps=6 format=3 uid="uid://vpvlwul3rmxi"]
+[gd_scene load_steps=10 format=3 uid="uid://vpvlwul3rmxi"]
 
 [ext_resource type="PackedScene" uid="uid://dqtt87mt1yiwd" path="res://hud.tscn" id="1_b26gb"]
 [ext_resource type="Script" path="res://battle_scene.gd" id="1_cch4f"]
 [ext_resource type="PackedScene" uid="uid://be5vj4g8fyflp" path="res://objects/actor.tscn" id="1_uprfe"]
 [ext_resource type="PackedScene" uid="uid://kep4cxgdd557" path="res://battle_feed.tscn" id="2_lgo8j"]
 [ext_resource type="PackedScene" uid="uid://cdfegrvsn5cps" path="res://interface.tscn" id="4_mbg84"]
+[ext_resource type="Texture2D" uid="uid://bj0un8vdjdvio" path="res://targeting_square.png" id="6_7db16"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kwe6l"]
+atlas = ExtResource("6_7db16")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b7a6s"]
+atlas = ExtResource("6_7db16")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tvlyx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kwe6l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b7a6s")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}]
 
 [node name="BattleScene" type="Control" node_paths=PackedStringArray("main_party", "enemy_party")]
+texture_filter = 1
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -126,3 +150,8 @@ char_name = "Summoner"
 name_color = Color(0.737255, 0.45098, 0.870588, 1)
 cant_be_targeted = true
 MHP = 10
+
+[node name="TargetCursor" type="AnimatedSprite2D" parent="."]
+position = Vector2(-64, -64)
+sprite_frames = SubResource("SpriteFrames_tvlyx")
+frame_progress = 0.663656

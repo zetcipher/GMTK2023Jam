@@ -30,11 +30,13 @@ func _ready():
 		$CharSprite.flip_h = true
 		$MonSprite.flip_h = true
 		$Skill.position.x -= 12
+		$Skill/Target.position.x -= 18
 		$hpbar.position.x += 16
 	else:
 		$CharSprite.flip_h = false
 		$MonSprite.flip_h = false
 		$Skill.position.x += 12
+		$Skill/Target.position.x += 18
 		$hpbar.position.x -= 24
 	
 	if not monster:
@@ -52,6 +54,10 @@ func icon_vis(on: bool):
 
 func set_icon(skill: int):
 	$Skill.frame = skill
+
+func set_tgt_icon(act_sprite: int, hero: bool):
+	if hero: $Skill/Target.frame = act_sprite - 1
+	else: $Skill/Target.frame = act_sprite + 4
 
 func set_sprites():
 	if not monster:

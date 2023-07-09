@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://be5vj4g8fyflp"]
+[gd_scene load_steps=32 format=3 uid="uid://be5vj4g8fyflp"]
 
 [ext_resource type="Texture2D" uid="uid://b4voxpbt11ob4" path="res://svb_future1.png" id="1_5wax4"]
 [ext_resource type="Script" path="res://objects/actor.gd" id="1_t3hci"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://d1i7b80l7klnu" path="res://skill_icons.png" id="6_gmx1y"]
 [ext_resource type="Texture2D" uid="uid://d2i8tbo3y4404" path="res://skill_bg.png" id="7_ht2vj"]
 [ext_resource type="Texture2D" uid="uid://dhac2ejw3x7sc" path="res://smallHealth_under.png" id="8_n24st"]
+[ext_resource type="Texture2D" uid="uid://dgibnwiljlvdc" path="res://mugshots.png" id="8_olrrm"]
 [ext_resource type="Texture2D" uid="uid://dsqr3ux18q7a" path="res://smallHealth.png" id="9_mmexg"]
 [ext_resource type="FontFile" uid="uid://2ku355c40ihc" path="res://3x5-numbers.ttf" id="10_pgplq"]
 [ext_resource type="Texture2D" uid="uid://d2ciyj6odyh71" path="res://names.png" id="11_it0fo"]
@@ -276,6 +277,12 @@ vframes = 2
 z_index = -1
 texture = ExtResource("7_ht2vj")
 metadata/_edit_lock_ = true
+
+[node name="Target" type="Sprite2D" parent="Skill"]
+position = Vector2(0, -21)
+texture = ExtResource("8_olrrm")
+hframes = 4
+vframes = 2
 
 [node name="hpbar" type="TextureProgressBar" parent="."]
 offset_left = -16.0

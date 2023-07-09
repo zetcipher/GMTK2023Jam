@@ -19,6 +19,11 @@ var actors_ordered : Array[Actor]
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	menu.heroes = main_party.size()
+	menu.monsters = enemy_party.size()
+	menu.connect("set_target_cursor", Callable(self, "set_target_cursor"))
+	menu.connect("action_requested", Callable(self, "override_action"))
+	
 	randomize()
 	get_window().size *= 3
 	
@@ -26,7 +31,10 @@ func _ready():
 	#feed.hide()
 	update_hud()
 	sort_actors()
-	determine_actions()
+	determine_actions(true)
+	for actor in actors: 
+		actor.target = determine_target(actor)
+		actor.set_tgt_icon(actor.target.sprite_set, !actor.target.monster)
 	
 	menu.init_pages(enemy_party)
 	menu.update_cursor()
@@ -44,13 +52,19 @@ func _process(delta):
 					actor.set_anim("dead")
 					main_party.erase(actor)
 					actors.erase(actor)
+					menu.heroes = main_party.size()
+					menu.monsters = enemy_party.size()
 			for actor in enemy_party:
 				if actor.HP <= 0: 
 					feed.add_line(str("[color=", actor.name_color.to_html(), "]", actor.char_name, "[/color]", " has been felled!"))
 					enemy_party.erase(actor)
 					actors.erase(actor)
-			determine_actions()
-			for actor in actors: actor.target = determine_target(actor)
+					menu.heroes = main_party.size()
+					menu.monsters = enemy_party.size()
+			determine_actions(false)
+			for actor in actors: 
+				actor.target = determine_target(actor)
+				actor.set_tgt_icon(actor.target.sprite_set, !actor.target.monster)
 			sort_actors_by_defending()
 		
 		
@@ -71,11 +85,24 @@ func _process(delta):
 		menu.show()
 
 
+func set_target_cursor(act_idx: int, hero: bool):
+	if act_idx < 0: 
+		$TargetCursor.position = Vector2(-64, -64)
+		return
+	
+	var actor : Actor
+	if hero: actor = main_party[act_idx]
+	else: actor = enemy_party[act_idx]
+	$TargetCursor.position = actor.position
+	
+
+
 func override_action(a_idx: int, slot_idx: int, tgt_idx: int, tgt_is_hero: bool):
 	var actor : Actor = enemy_party[a_idx]
 	actor.next_action = slot_idx
 	if tgt_is_hero: actor.target = main_party[tgt_idx]
 	else: actor.target = enemy_party[tgt_idx]
+	actor.set_tgt_icon(actor.target.sprite_set, !actor.target.monster)
 	acting = true
 
 
@@ -94,7 +121,7 @@ func get_party_HP_percentage(heroes: bool) -> float:
 	return float(total_HP) / float(total_MHP)
 
 
-func determine_actions():
+func determine_actions(ignore_logic: bool):
 	for actor in actors:
 		if (actor.char_name == "Delta" and get_party_HP_percentage(true) < 0.75) or (actor.char_name == "Knight" and get_party_HP_percentage(false) < 0.75):
 			actor.next_action = 2
@@ -103,6 +130,7 @@ func determine_actions():
 		else:
 			while actor.next_action == actor.last_action:
 				actor.next_action = randi_range(0, actor.set_skills.size() - 1)
+			if ignore_logic: actor.next_action = randi_range(0, actor.set_skills.size() - 1)
 		actor.set_icon(actor.set_skills[actor.next_action])
 		actor.icon_vis(true)
 
@@ -111,7 +139,8 @@ func determine_target(actor: Actor) -> Actor:
 	var is_hero := true
 	if enemy_party.has(actor): is_hero = false
 	var target : Actor
-	if (is_hero and skill < 4) or (not is_hero and skill > 3): target = enemy_party.pick_random() 
+	if skill == Skills.DEFEND or skill == Skills.HEAL_ALL: target = actor
+	elif (is_hero and skill < 4) or (not is_hero and skill > 3): target = enemy_party.pick_random() 
 	elif (not is_hero and skill < 4) or (is_hero and skill > 3): target = main_party.pick_random() 
 	else: target = actors.pick_random() #failsafe
 	
