@@ -24,6 +24,8 @@ func _ready():
 	menu.connect("set_target_cursor", Callable(self, "set_target_cursor"))
 	menu.connect("action_requested", Callable(self, "override_action"))
 	
+	$MainParty/Actor.ATK = 999 # testing
+	
 	randomize()
 	get_window().size *= 3
 	update_hud()
@@ -76,6 +78,8 @@ func check_who_died():
 	for actor in enemy_party:
 		if actor.HP <= 0: 
 			feed.add_line(str("[color=", actor.name_color.to_html(), "]", actor.char_name, "[/color]", " has been felled!"))
+			menu.remove_page(enemy_party.find(actor))
+			menu.max_idx.x -= 1
 			enemy_party.erase(actor)
 			actors.erase(actor)
 			menu.heroes = main_party.size()

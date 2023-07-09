@@ -73,9 +73,9 @@ func _process(delta):
 			return
 		
 		if Input.is_action_just_pressed("ui_accept"):
-			target_idx = 0
 			emit_signal("set_target_cursor", -1, false)
 			emit_signal("action_requested", cursor_idx.x, cursor_idx.y, target_idx, target_heroes)
+			target_idx = 0
 			return
 	
 
@@ -139,3 +139,12 @@ func setup_last():
 			label.text = action_names[i]
 		else:
 			label.text = ""
+
+func remove_page(idx: int): # this is a horrible way to do this, but this is a game jam time crunch moment
+	get_node(str("Char",idx)).name = "Dead"
+	var i := 0
+	for child in get_children():
+		if child.name == "Dead": continue
+		child.name = "Char" + str(i)
+		i += 1
+	get_node("Dead").queue_free()
