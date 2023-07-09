@@ -44,12 +44,14 @@ func _process(delta):
 			if cursor_idx.x == max_idx.x:
 				pass # summoner actions
 				return
-		
-			match get_skill():
-				Skills.DEFEND or Skills.HEAL_ALL:
-					emit_signal("action_requested", cursor_idx.x, cursor_idx.y, cursor_idx.x)
+			
+			var skill := get_skill() as Skills
+			
+			match skill:
+				Skills.DEFEND, Skills.HEAL_ALL:
+					emit_signal("action_requested", cursor_idx.x, cursor_idx.y, cursor_idx.x, false)
 					return
-				Skills.HEAL_ONE or Skills.BUFF_ATK or Skills.BUFF_EVA:
+				Skills.HEAL_ONE, Skills.BUFF_ATK, Skills.BUFF_EVA:
 					selecting_target = true
 					target_heroes = false
 					emit_signal("set_target_cursor", target_idx, target_heroes)

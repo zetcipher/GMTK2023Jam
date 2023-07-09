@@ -26,15 +26,9 @@ func _ready():
 	
 	randomize()
 	get_window().size *= 3
-	
-	feed.clear_lines()
-	#feed.hide()
 	update_hud()
 	sort_actors()
-	determine_actions(true)
-	for actor in actors: 
-		actor.target = determine_target(actor)
-		actor.set_tgt_icon(actor.target.sprite_set, !actor.target.monster)
+	construct_turn(true)
 	
 	menu.init_pages(enemy_party)
 	menu.update_cursor()
@@ -44,39 +38,16 @@ func _ready():
 
 func _process(delta):
 	if wait_time <= 0.0 and acting:
-		if turn == 0:
-			feed.clear_lines()
-			for actor in main_party:
-				if actor.HP <= 0: 
-					feed.add_line(str("[color=", actor.name_color.to_html(), "]", actor.char_name, "[/color]", " has fallen..."))
-					actor.set_anim("dead")
-					main_party.erase(actor)
-					actors.erase(actor)
-					menu.heroes = main_party.size()
-					menu.monsters = enemy_party.size()
-			for actor in enemy_party:
-				if actor.HP <= 0: 
-					feed.add_line(str("[color=", actor.name_color.to_html(), "]", actor.char_name, "[/color]", " has been felled!"))
-					enemy_party.erase(actor)
-					actors.erase(actor)
-					menu.heroes = main_party.size()
-					menu.monsters = enemy_party.size()
-			determine_actions(false)
-			for actor in actors: 
-				actor.target = determine_target(actor)
-				actor.set_tgt_icon(actor.target.sprite_set, !actor.target.monster)
-			sort_actors_by_defending()
-		
-		
-		execute_action(actors_ordered[turn], actors_ordered[turn].target)
-		turn += 1
 		if turn > actors.size() - 1: 
 			turn = 0
 			cycles += 1
+			conclude_turn()
 			acting = false
 			menu.selecting_target = false
 			menu.active = true
 		else: wait_time = 0.25
+		execute_action(actors_ordered[turn], actors_ordered[turn].target)
+		turn += 1
 	if Input.is_action_just_pressed("ui_accept"): wait_time = 0.0
 	
 	if acting: 
@@ -86,6 +57,37 @@ func _process(delta):
 	else: 
 		feed.hide()
 		menu.show()
+
+func construct_turn(completely_random := false):
+	determine_actions(completely_random)
+	for actor in actors: 
+		actor.target = determine_target(actor)
+		actor.set_tgt_icon(actor.target.sprite_set, !actor.target.monster)
+
+func check_who_died():
+	for actor in main_party:
+		if actor.HP <= 0: 
+			feed.add_line(str("[color=", actor.name_color.to_html(), "]", actor.char_name, "[/color]", " has fallen..."))
+			actor.set_anim("dead")
+			main_party.erase(actor)
+			actors.erase(actor)
+			menu.heroes = main_party.size()
+			menu.monsters = enemy_party.size()
+	for actor in enemy_party:
+		if actor.HP <= 0: 
+			feed.add_line(str("[color=", actor.name_color.to_html(), "]", actor.char_name, "[/color]", " has been felled!"))
+			enemy_party.erase(actor)
+			actors.erase(actor)
+			menu.heroes = main_party.size()
+			menu.monsters = enemy_party.size()
+			
+
+func conclude_turn():
+	feed.clear_lines()
+	
+	check_who_died()
+	
+	construct_turn()
 
 
 func set_target_cursor(act_idx: int, hero: bool):
@@ -105,7 +107,13 @@ func override_action(a_idx: int, slot_idx: int, tgt_idx: int, tgt_is_hero: bool)
 	actor.next_action = slot_idx
 	if tgt_is_hero: actor.target = main_party[tgt_idx]
 	else: actor.target = enemy_party[tgt_idx]
+	actor.set_icon(actor.set_skills[slot_idx])
 	actor.set_tgt_icon(actor.target.sprite_set, !actor.target.monster)
+	start_turn()
+
+
+func start_turn():
+	sort_actors_by_defending()
 	menu.active = false
 	acting = true
 
@@ -174,13 +182,13 @@ func execute_action(actor: Actor, target: Actor):
 			damage = calc_damage(actor.ATK, target.DEF * def_mult, 0)
 	send_line_to_feed(actor, target, action, damage)
 	actor.last_action = actor.next_action
-	if action != Skills.HEAL_ALL:
+	if action != Skills.HEAL_ALL and action != Skills.DEFEND:
 		target.change_hp(-damage)
 		if action != Skills.HEAL_ONE:
 			create_popoff(target.position, damage, 0)
 		else:
 			create_popoff(target.position, damage, 1)
-	else:
+	elif action != Skills.DEFEND:
 		if main_party.has(actor):
 			for p in main_party: 
 				p.change_hp(damage)
