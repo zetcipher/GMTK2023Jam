@@ -73,7 +73,10 @@ func _process(delta):
 		if turn > actors.size() - 1: 
 			turn = 0
 			cycles += 1
-		wait_time = 0.25
+			acting = false
+			menu.selecting_target = false
+			menu.active = true
+		else: wait_time = 0.25
 	if Input.is_action_just_pressed("ui_accept"): wait_time = 0.0
 	
 	if acting: 
@@ -103,6 +106,7 @@ func override_action(a_idx: int, slot_idx: int, tgt_idx: int, tgt_is_hero: bool)
 	if tgt_is_hero: actor.target = main_party[tgt_idx]
 	else: actor.target = enemy_party[tgt_idx]
 	actor.set_tgt_icon(actor.target.sprite_set, !actor.target.monster)
+	menu.active = false
 	acting = true
 
 
@@ -236,7 +240,7 @@ func send_line_to_feed(actor: Actor, target: Actor, action: Skills, damage := 0)
 
 func sort_actors(): # This function sorts actors by speed, highest first, lowest last.
 	actors = main_party + enemy_party
-	var fastest_actors : Array[Actor]
+	var fastest_actors : Array[Actor] = []
 	var speeds : Array[int]
 	for actor in actors:
 		speeds.append(actor.SPD)
