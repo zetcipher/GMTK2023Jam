@@ -24,7 +24,7 @@ func _ready():
 	menu.connect("set_target_cursor", Callable(self, "set_target_cursor"))
 	menu.connect("action_requested", Callable(self, "override_action"))
 	
-	$MainParty/Actor.ATK = 999 # testing
+	#$MainParty/Actor.ATK = 999 # testing
 	
 	randomize()
 	get_window().size *= 3
