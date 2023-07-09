@@ -13,7 +13,7 @@ grow_vertical = 2
 script = ExtResource("1_728oc")
 
 [node name="TextureRect" type="TextureRect" parent="."]
-modulate = Color(0.592157, 0.592157, 0.592157, 1)
+modulate = Color(0.447059, 0.447059, 0.447059, 1)
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -144,18 +144,18 @@ layout_mode = 0
 offset_left = 8.0
 offset_top = 16.0
 offset_right = 632.0
-offset_bottom = 184.0
+offset_bottom = 120.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/normal_font_size = 14
+theme_override_font_sizes/normal_font_size = 12
 text = "The evil corporate overlords remain unscathed by your attempts at defeating them.
 In retaliation, they have cursed you with an illness that will result in you having
 ZERO DOLLARS in 2 weeks. In an effort to free yourself of this curse, you must put your trust in a rag-tag group of heroes. Unfortunately, you have also been tasked with taking them down. In order to be free of the curse, you must allow the heroes to succeed in battle, but put up enough of a show to avoid suspicion from the evil corporate overlords."
 
 [node name="Label2" type="Label" parent="Info"]
 layout_mode = 0
-offset_top = 144.0
+offset_top = 120.0
 offset_right = 74.0
-offset_bottom = 167.0
+offset_bottom = 143.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 0
@@ -165,9 +165,9 @@ text = "HOW TO PLAY: "
 [node name="RichTextLabel2" type="RichTextLabel" parent="Info"]
 layout_mode = 0
 offset_left = 8.0
-offset_top = 160.0
+offset_top = 136.0
 offset_right = 632.0
-offset_bottom = 351.0
+offset_bottom = 358.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/normal_font_size = 14
 text = "Pick a monster to control with the left and right arrow keys.
@@ -176,4 +176,6 @@ Press Space or Enter to confirm your selection.
 Use the up and down arrow keys to select a target for applicable skills.
 Press escape to cancel your selection.
 A skill cannot be used twice in a row.
+Characters aren't pronounced dead until the end of the turn.
+
 To win you must allow the heroes to defeat all the monsters, but you must also flee the battle before they do. Choose the \"Flee Battle\" option when you are confident the heroes will come out on top. If the heroes all die, or you haven't fled when they win, you lose."

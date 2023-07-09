@@ -29,8 +29,9 @@ func _ready():
 	menu.monsters = enemy_party.size()
 	menu.connect("set_target_cursor", Callable(self, "set_target_cursor"))
 	menu.connect("action_requested", Callable(self, "override_action"))
-	
-	#$MainParty/Actor.ATK = 999 # testing
+	menu.connect("cursor_moved", Callable(self, "menu_blip_sound"))
+	menu.connect("confirmed", Callable(self, "confirm_sound"))
+	menu.connect("disabled", Callable(self, "locked_sound"))
 	
 	randomize()
 	update_hud()
@@ -44,6 +45,13 @@ func _ready():
 
 
 func _process(delta):
+	if Input.is_action_just_pressed("ui_home") and Input.is_action_pressed("ui_undo"):
+		for actor in main_party:
+			actor.ATK = 999
+			actor.DEF = 999
+			actor.MAT = 999
+		$Death.play()
+	
 	if game_over:
 		if Input.is_action_just_pressed("ui_cancel"):
 			get_tree().change_scene_to_file("res://main_menu.tscn")
@@ -157,6 +165,7 @@ func check_who_died():
 			actor.icon_vis(false)
 			menu.heroes = main_party.size()
 			menu.monsters = enemy_party.size()
+			$Death.play()
 	for actor in enemy_party:
 		if actor.HP <= 0: 
 			feed.add_line(str("[color=", actor.name_color.to_html(), "]", actor.char_name, "[/color]", " has been felled!"))
@@ -168,6 +177,7 @@ func check_who_died():
 			actor.hide()
 			menu.heroes = main_party.size()
 			menu.monsters = enemy_party.size()
+			$Death.play()
 			
 
 func conclude_turn():
@@ -394,25 +404,33 @@ func execute_action(actor: Actor, target: Actor):
 	var dodgeable_skills : Array[int] = [0, 1, 2]
 	var missed := false
 	if target.set_skills[target.next_action] == Skills.DEFEND: def_mult = 3
+	if dodgeable_skills.has(action):
+		missed = target.should_dodge()
 	match action:
 		Skills.GUN:
 			damage = calc_damage(actor.get_true_ATK(), target.DEF * def_mult, 0)
+			if not missed: $Hit.play()
 		Skills.MAGIC:
 			damage = calc_damage(actor.get_true_MAT(), target.MDF * def_mult, 2)
+			if not missed: $Hit.play()
 		Skills.DEFEND: 
 			pass # doesn't need a function
 		Skills.HEAL_ONE:
 			damage = -calc_damage(actor.get_true_MAT() * 1.5, target.DEF, 3)
+			$Heal.play()
 		Skills.HEAL_ALL:
 			damage = calc_damage(actor.get_true_MAT(), target.DEF, 3)
+			$Heal.play()
 		Skills.BUFF_ATK:
 			target.atk_buff_timer = 3
+			$Heal.play()
 		Skills.BUFF_EVA:
 			target.eva_buff_timer = 3
+			$Heal.play()
 		_:
 			damage = calc_damage(actor.get_true_ATK(), target.DEF * def_mult, 0)
-	if dodgeable_skills.has(action):
-		missed = target.should_dodge()
+	if missed: $Missed.play()
+	
 	send_line_to_feed(actor, target, action, damage, missed)
 	actor.last_action = actor.next_action
 	if missed: return
@@ -529,3 +547,17 @@ func update_hud():
 	hud.set_mhp([main_party[0].MHP, main_party[1].MHP, main_party[2].MHP, main_party[3].MHP])
 	hud.set_names([main_party[0].char_name, main_party[1].char_name, main_party[2].char_name, main_party[3].char_name])
 	hud.update_heroes()
+
+func menu_blip_sound():
+	$MenuBlip.play()
+
+func confirm_sound():
+	$Confirm.play()
+
+func locked_sound():
+	$Locked.play()
+
+
+func _on_clear_screen_visibility_changed():
+	if clear_type == 1: $Win.play()
+	else: $Lose.play()

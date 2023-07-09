@@ -2,6 +2,9 @@ class_name Interface extends Control
 
 signal action_requested(actor_idx: int, skill_slot: int, target_idx: int, hero: bool)
 signal set_target_cursor(actor_idx: int, hero: bool)
+signal cursor_moved()
+signal confirmed()
+signal disabled()
 
 enum Skills {MELEE, GUN, MAGIC, DEFEND, HEAL_ONE, HEAL_ALL, BUFF_ATK, BUFF_EVA}
 
@@ -44,19 +47,27 @@ func _process(delta):
 			if cursor_idx.x == max_idx.x:
 				match cursor_idx.y:
 					1: 
-						if locked_skills[monsters] != 1: emit_signal("action_requested", -2, -1, -1, false)
-						else: return
+						if locked_skills[monsters] != 1: 
+							emit_signal("confirmed")
+							emit_signal("action_requested", -2, -1, -1, false)
+						else: 
+							emit_signal("disabled")
+							return
 					2:
+						emit_signal("confirmed")
 						emit_signal("action_requested", -3, -1, -1, false)
 						return
 					_:
+						emit_signal("confirmed")
 						emit_signal("action_requested", -1, -1, -1, false)
 						locked_skills[monsters] = -1
 				return
 			
 			if locked_skills[cursor_idx.x] == cursor_idx.y:
+				emit_signal("disabled")
 				return
 			
+			emit_signal("confirmed")
 			var skill := get_skill() as Skills
 			
 			match skill:
@@ -102,7 +113,7 @@ func move_target_cursor(up: bool):
 		else: target_idx = monsters - 1
 	elif target_heroes and target_idx > heroes - 1: target_idx = 0
 	elif not target_heroes and target_idx > monsters - 1: target_idx = 0
-	
+	emit_signal("cursor_moved")
 	emit_signal("set_target_cursor", target_idx, target_heroes)
 
 func move_cursor(dir: Vector2i):
@@ -113,6 +124,7 @@ func move_cursor(dir: Vector2i):
 	if cursor_idx.y < 0: cursor_idx.y = max_idx.y
 	if cursor_idx.y > max_idx.y: cursor_idx.y = 0
 	if cursor_idx.y > 2 and cursor_idx.x == max_idx.x: cursor_idx.y = 0
+	emit_signal("cursor_moved")
 	update_cursor()
 
 func update_cursor():
