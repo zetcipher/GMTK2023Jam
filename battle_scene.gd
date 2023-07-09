@@ -19,6 +19,7 @@ var actors_ordered : Array[Actor]
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	$TargetCursor.play("default")
 	menu.heroes = main_party.size()
 	menu.monsters = enemy_party.size()
 	menu.connect("set_target_cursor", Callable(self, "set_target_cursor"))
@@ -27,7 +28,6 @@ func _ready():
 	#$MainParty/Actor.ATK = 999 # testing
 	
 	randomize()
-	get_window().size *= 3
 	update_hud()
 	sort_actors()
 	construct_turn(true)
@@ -40,7 +40,7 @@ func _ready():
 
 func _process(delta):
 	if wait_time <= 0.0 and acting:
-		if turn > actors.size() - 1: 
+		if turn > actors.size(): 
 			turn = 0
 			cycles += 1
 			conclude_turn()
@@ -50,7 +50,9 @@ func _process(delta):
 			menu.selecting_target = false
 			menu.active = true
 		else: wait_time = 0.25
-		execute_action(actors_ordered[turn], actors_ordered[turn].target)
+		if turn == actors.size(): check_who_died()
+		if turn < actors.size() and acting: 
+			execute_action(actors_ordered[turn], actors_ordered[turn].target)
 		turn += 1
 	if Input.is_action_just_pressed("ui_accept"): wait_time = 0.0
 	
@@ -87,15 +89,13 @@ func check_who_died():
 			menu.max_idx.x -= 1
 			enemy_party.erase(actor)
 			actors.erase(actor)
+			actor.hide()
 			menu.heroes = main_party.size()
 			menu.monsters = enemy_party.size()
 			
 
 func conclude_turn():
 	feed.clear_lines()
-	
-	check_who_died()
-	
 	construct_turn()
 
 
@@ -117,13 +117,13 @@ func override_action(a_idx: int, slot_idx: int, tgt_idx: int, tgt_is_hero: bool)
 		return
 	if a_idx == -2:
 		menu.locked_skills[menu.monsters] = 1
-		do_smart_hero_actions()
 		var msg := randi_range(0, 3)
 		match msg:
 			1: feed.add_line("Someone whispered into the ears of the heroes!")
 			2: feed.add_line("The heroes might actually have a chance!")
 			3: feed.add_line("You don't have much confidence in them, do you?")
 			_: feed.add_line("The heroes are getting their act together this turn!")
+		do_smart_hero_actions()
 		return
 	
 	var actor : Actor = enemy_party[a_idx]
@@ -352,10 +352,10 @@ func sort_actors(): # This function sorts actors by speed, highest first, lowest
 func sort_actors_by_defending():
 	actors_ordered = []
 	for actor in actors:
-		if actor.set_skills[actor.next_action] == Skills.DEFEND:
+		if actor.set_skills[actor.next_action] == 3:
 			actors_ordered.append(actor)
 	for actor in actors:
-		if actor.set_skills[actor.next_action] != Skills.DEFEND:
+		if actor.set_skills[actor.next_action] != 3:
 			actors_ordered.append(actor)
 #	print(actors)
 #	print(actors_ordered)
