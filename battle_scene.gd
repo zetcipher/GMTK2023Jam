@@ -66,6 +66,8 @@ func _process(delta):
 
 func construct_turn(completely_random := false):
 	determine_actions(completely_random)
+	if randi() % 2 == 0: do_smart_monster_actions(randi_range(1, 5))
+	
 	for i in range(enemy_party.size()):
 		var actor : Actor = enemy_party[i]
 		menu.locked_skills[i] = actor.last_action
@@ -180,6 +182,53 @@ func determine_target(actor: Actor) -> Actor:
 	else: target = actors.pick_random() #failsafe
 	
 	return target
+
+
+func do_smart_monster_actions(teamwork := 3):
+	for actor in enemy_party:
+		if get_party_HP_percentage(false) < 0.75:
+			if actor.char_name == "Bird":
+				if actor.last_action == 3: 
+					actor.next_action = 2
+					actor.target = find_lowest_hp_actor(false)
+				else: 
+					actor.next_action = 3
+					actor.target = actor
+			if actor.char_name == "Knight":
+				if actor.last_action == 2:
+					actor.next_action = 1
+					actor.target = find_lowest_hp_actor(false)
+				else:
+					actor.next_action = 2
+					actor.target = actor
+		else:
+			if actor.char_name == "Bird":
+				if actor.last_action == 1: 
+					actor.next_action = 0
+					if randi() % teamwork == 0: actor.target = find_lowest_hp_actor(true)
+					else: actor.target = main_party.pick_random()
+				else: 
+					actor.next_action = 1
+					if randi() % teamwork == 0: actor.target = find_lowest_hp_actor(true)
+					else: actor.target = main_party.pick_random()
+			if actor.char_name == "Knight":
+				if actor.last_action == 2:
+					actor.next_action = 0
+					if randi() % teamwork == 0: actor.target = find_lowest_hp_actor(true)
+					else: actor.target = main_party.pick_random()
+				else:
+					actor.next_action = 2
+					actor.target = actor
+		if actor.char_name == "Minotaur":
+			actor.next_action = 1
+			while actor.next_action == actor.last_action: actor.next_action = randi_range(0,2)
+			if actor.next_action == 2:
+				if enemy_party[0].name == "Knight": actor.target = enemy_party[0]
+				elif enemy_party[1].name == "Knight": actor.target = enemy_party[1]
+				else: actor.target = actor
+			else: 
+				if randi() % teamwork == 0: actor.target = find_lowest_hp_actor(true)
+				else: actor.target = main_party.pick_random()
 
 
 func do_smart_hero_actions():

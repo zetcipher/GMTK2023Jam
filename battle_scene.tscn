@@ -59,17 +59,17 @@ layout_mode = 1
 [node name="MainParty" type="Node2D" parent="."]
 
 [node name="Actor" parent="MainParty" instance=ExtResource("1_uprfe")]
-position = Vector2(224, 72)
+position = Vector2(224, 120)
 char_name = "Alpha"
 sprite_set = 1
 face_right = true
 MHP = 500
-ATK = 35
+ATK = 30
 DEF = 20
 set_skills = Array[int]([0, 1, 6, 3])
 
 [node name="Actor2" parent="MainParty" instance=ExtResource("1_uprfe")]
-position = Vector2(208, 104)
+position = Vector2(208, 152)
 char_name = "Bravo"
 sprite_set = 2
 face_right = true
@@ -80,17 +80,17 @@ SPD = 20
 set_skills = Array[int]([0, 1, 2, 3])
 
 [node name="Actor3" parent="MainParty" instance=ExtResource("1_uprfe")]
-position = Vector2(192, 136)
+position = Vector2(192, 184)
 char_name = "Charlie"
 sprite_set = 3
 face_right = true
 MHP = 250
-ATK = 70
+ATK = 55
 SPD = 18
 set_skills = Array[int]([0, 1, 7, 3])
 
 [node name="Actor4" parent="MainParty" instance=ExtResource("1_uprfe")]
-position = Vector2(176, 168)
+position = Vector2(176, 216)
 char_name = "Delta"
 sprite_set = 4
 face_right = true
@@ -104,11 +104,11 @@ set_skills = Array[int]([2, 4, 5, 3])
 [node name="EnemyParty" type="Node2D" parent="."]
 
 [node name="Actor5" parent="EnemyParty" instance=ExtResource("1_uprfe")]
-position = Vector2(384, 88)
+position = Vector2(384, 136)
 char_name = "Bird"
 name_color = Color(1, 0.0666667, 0.333333, 1)
 monster = true
-MHP = 300
+MHP = 400
 ATK = 15
 DEF = 5
 MAT = 30
@@ -117,26 +117,26 @@ SPD = 30
 set_skills = Array[int]([0, 2, 7, 3])
 
 [node name="Actor6" parent="EnemyParty" instance=ExtResource("1_uprfe")]
-position = Vector2(408, 120)
+position = Vector2(408, 168)
 char_name = "Knight"
 name_color = Color(1, 0.0666667, 0.333333, 1)
 monster = true
 sprite_set = 1
-MHP = 600
+MHP = 800
 ATK = 40
 DEF = 20
-MAT = 80
-MDF = 5
+MAT = 100
+MDF = 0
 SPD = 5
 set_skills = Array[int]([0, 4, 5, 3])
 
 [node name="Actor7" parent="EnemyParty" instance=ExtResource("1_uprfe")]
-position = Vector2(432, 152)
+position = Vector2(432, 200)
 char_name = "Minotaur"
 name_color = Color(1, 0.0666667, 0.333333, 1)
 monster = true
 sprite_set = 2
-MHP = 450
+MHP = 600
 ATK = 70
 DEF = 15
 MAT = 40
@@ -145,7 +145,7 @@ SPD = 15
 set_skills = Array[int]([0, 2, 6, 3])
 
 [node name="Actor8" parent="EnemyParty" instance=ExtResource("1_uprfe")]
-position = Vector2(472, 120)
+position = Vector2(472, 168)
 char_name = "Summoner"
 name_color = Color(0.737255, 0.45098, 0.870588, 1)
 cant_be_targeted = true
